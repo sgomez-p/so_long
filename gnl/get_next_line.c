@@ -21,7 +21,7 @@ char	*ft_read_buffer(int fd, char *buffer)
 	if (!buff)
 		return (NULL);
 	bytes = 1;
-	while (!ft_strchr(buffer, '\n') && bytes != 0)
+	while (!ft_strchr2(buffer, '\n') && bytes != 0)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes < 0)
@@ -30,7 +30,7 @@ char	*ft_read_buffer(int fd, char *buffer)
 			return (NULL);
 		}
 		buff[bytes] = '\0';
-		buffer = ft_strjoin(buffer, buff);
+		buffer = ft_strjoin2(buffer, buff);
 	}
 	free(buff);
 	return (buffer);

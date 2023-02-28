@@ -6,76 +6,82 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/02/23 14:11:36 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/02/24 12:50:44 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CSO_LONG = parse_map.c so_long.c
-OSO_LONG = ${CSO_LONG:.c=.o}
+NAME = so_long.out
 
-CLIBFT = \
-	libft/lib/ft_atoi.c libft/lib/ft_bzero.c libft/lib/ft_calloc.c \
-	libft/lib/ft_isalnum.c libft/lib/ft_isalpha.c libft/lib/ft_isascii.c \
-	libft/lib/ft_isdigit.c libft/lib/ft_isprint.c libft/lib/ft_memchr.c \
-	libft/lib/ft_memcmp.c libft/lib/ft_memcpy.c libft/lib/ft_memmove.c \
-	libft/lib/ft_memset.c libft/lib/ft_strchr.c libft/lib/ft_strdup.c \
-	libft/lib/ft_strlcat.c libft/lib/ft_strlcpy.c libft/lib/ft_strlen.c \
-	libft/lib/ft_strncmp.c libft/lib/ft_strnstr.c libft/lib/ft_strrchr.c \
-	libft/lib/ft_tolower.c libft/lib/ft_toupper.c libft/lib/ft_substr.c \
-	libft/lib/ft_strjoin.c libft/lib/ft_strtrim.c libft/lib/ft_putchar_fd.c \
-	libft/lib/ft_putstr_fd.c libft/lib/ft_putendl_fd.c libft/lib/ft_putnbr_fd.c \
-	libft/lib/ft_itoa.c libft/lib/ft_strmapi.c libft/lib/ft_striteri.c \
-	libft/lib/ft_split.c libft/lib/ft_lstnew_bonus.c \
-	libft/lib/ft_lstadd_front_bonus.c libft/lib/ft_lstsize_bonus.c \
-	libft/lib/ft_lstlast_bonus.c libft/lib/ft_lstadd_back_bonus.c \
-	libft/lib/ft_lstdelone_bonus.c libft/lib/ft_lstclear_bonus.c \
-	libft/lib/ft_lstiter_bonus.c libft/lib/ft_lstmap_bonus.c
+SRC = $(MAIN_SRC) $(SRC_ERR) $(SRC_GNL) $(SRC_MAP) $(SRC_GAME)
 
-OLIBFT = ${CLIBFT:.c=.o}
+MAIN_SRC = parse_map.c so_long.c
 
-CPRINTF = \
-	libft/printf/ft_printf_hexlow.c libft/printf/ft_printf_hexup.c \
-	libft/printf/ft_printf_int.c libft/printf/ft_printf_str.c \
-	libft/printf/ft_printf_unsigned_int.c libft/printf/ft_printf_void_hex.c \
-	libft/printf/check_format.c libft/printf/ft_printf_per.c \
-	libft/printf/utils.c
+LIBFT_A = libft.a
+LIBF_DIR = libft/
+LIBFT  = $(addprefix $(LIBF_DIR), $(LIBFT_A))
 
-OPRINTF = ${CPRINTF:.c=.o}
+GNL = get_next_line.c get_next_line_utils.c
+SRC_GNL = $(addprefix gnl/, $(GNL))
 
-CGNL = \
-	libft/gnl/get_next_line.c libft/gnl/get_next_line_utils.c \
-	libft/gnl/get_next_line_bonus.c libft/gnl/get_next_line_utils_bonus.c
-OGNL = ${CGNL:.c=.o}
+MAP = 
+SRC_MAP = $(addprefix map/, $(MAP))
 
-###############################################################################
-# SETTINGS #
-###############################################################################
+GAME =	
+SRC_GAME = $(addprefix game/, $(GAME))
 
-NLIBRARY = libft.a
+OBJ = *.o
 
-CC = clang
-CFLAGS = -Wall -Werror -Wextra
-OPGRAFIC = -lmlx -framework OpenGL -framework AppKit
-FSANITIZE = -fsanitize=address -g
+FLAGS = -lmlx -lXext -lX11 -Wall -Wextra -Werror
+INCLUDE =  -framework OpenGL -framework AppKit
 
-AR = ar
-ARFLAGS = -rcs
-RM = rm -f
+NONE='\033[0m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+GRAY='\033[2;37m'
+CURSIVE='\033[3m'
 
-LIBFT = $(OLIBFT) $(OPRINTF) $(OGNL)
+all: $(NAME)
 
-###############################################################################
-ifdef WITH_BONUS
-	OBJS_SO_LONG = ${OSO_LONGB}
+$(NAME): $(OBJ)
+	@echo $(CURSIVE)$(GRAY) "     - Making libft..." $(NONE)
+	@make -C $(LIBF_DIR)
+	@echo $(CURSIVE)$(GRAY) "     - Compiling $(NAME)..." $(NONE)
+	@gcc $(FLAGS) $(OBJ) $(LIBFT) $(INCLUDE) -o $(NAME)
+	@echo $(GREEN)"- Compiled -"$(NONE)
 
-else
-	OBJS_SO_LONG = ${OSO_LONG}
+$(OBJ): $(SRC)
+	@echo $(CURSIVE)$(GRAY) "     - Making object files..." $(NONE)
+	@gcc $(FALGS) -c $(SRC)
 
-endif
+exe: re
+	@make -C ./ clean
+	@echo $(YELLOW)"     - Executing $(NAME)... \n"$(NONE)
+	@./$(NAME) $(m)
+	@echo $(YELLOW)"\n     - Done -"$(NONE)
 
-SO_LONG = so_long
+play: all
+	@echo $(YELLOW)"     - Playing all maps... \n"$(NONE)
+	@make -C ./ clean
+	@./$(NAME) map_files/map_0.ber
 
-all: ${SO_LONG}
+norm:
+	@echo $(GRAY) ""
+	@norminette $(SRC) *.h */*.h
+	@echo $(NONE) ""
 
-${SO_LONG}: ${OBJS_SO_LONG} ${NLIBRARY}
-	@${CC} ${CFLAGS} $^ ${OPGRAFIC} ${FSANITIZE} -o $
+libftnorm:
+	@echo $(GRAY) ""
+	@make -C $(LIBF_DIR) norm HEADER_DIRECTORY=.
+	@echo $(NONE) ""
+
+clean:
+	@echo $(CURSIVE)$(GRAY) "     - Removing object files..." $(NONE)
+	@rm -rf $(OBJ)
+	@make -C $(LIBF_DIR) clean
+
+fclean: clean
+	@echo $(CURSIVE)$(GRAY) "     - Removing $(NAME)..." $(NONE)
+	@rm -rf $(NAME)
+	@make -C $(LIBF_DIR) fclean
+
+re: fclean all

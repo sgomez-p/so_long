@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/02/23 12:23:46 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/02/24 12:32:13 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
-
+# include "minilibx/mlx.h" //mirar si cuando se entrega hay q quitar carpeta de minilibx
+# include "minilibx/mlx_int.h"
 
 
 

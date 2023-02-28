@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen22(const char *s)
 {
 	size_t	i;
 
@@ -22,12 +22,12 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+char	*ft_strchr2(char *s, int c)
 {
 	if (!s)
 		return (0);
 	if (c == '\0')
-		return ((char *)&s[ft_strlen(s)]);
+		return ((char *)&s[ft_strlen2(s)]);
 	while (*s)
 	{
 		if (*s == (char)c)
@@ -37,7 +37,7 @@ char	*ft_strchr(char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char *buffer, char *buff)
+char	*ft_strjoin2(char *buffer, char *buff)
 {
 	size_t	i;
 	size_t	j;
@@ -50,7 +50,7 @@ char	*ft_strjoin(char *buffer, char *buff)
 	}
 	if (!buffer || !buff)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(buffer) + ft_strlen(buff)) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen2(buffer) + ft_strlen2(buff)) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -106,7 +106,7 @@ char	*ft_new_line(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	line = (char *)malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
+	line = (char *)malloc(sizeof(char) * (ft_strlen2(buffer) - i + 1));
 	if (!line)
 		return (NULL);
 	i++;

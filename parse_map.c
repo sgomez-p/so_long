@@ -6,17 +6,16 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/02/23 14:09:03 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/02/24 12:47:19 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-#include "libft/lib/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft/gnl/get_next_line.h"
-#include <mlx.h>
+#include "libft/libft.h"
+#include "gnl/get_next_line.h"
 
 #define ERROR "Error\n"
 #define VALID "Valid map\n"
@@ -172,19 +171,21 @@ int is_valid_path(char **map, int rows, int cols)
 }
 
 
-
 int main(void)
 {
     void *mlx_ptr;
     void *win_ptr;
     void *img_ptr;
+    int width = 800;
+    int height = 600;
     char *filename = "image.xpm";
 
     mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr, 800, 600, "Map Viewer");
+    win_ptr = mlx_new_window(mlx_ptr, width, height, "Map Viewer");
     img_ptr = mlx_xpm_file_to_image(mlx_ptr, filename, &width, &height);
     mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
     mlx_loop(mlx_ptr);
 
     return 0;
 }
+
