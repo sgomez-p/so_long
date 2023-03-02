@@ -6,13 +6,13 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 12:43:43 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/10 14:43:42 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/02 12:55:57 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr(char *s, int fd)
 {
 	int	i;
 

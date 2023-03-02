@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/02 09:03:25 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/02 13:02:34 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,27 +239,40 @@ int is_valid_path(char **map, int rows, int cols)
     return is_valid_path_helper(map, rows, cols, start_row, start_col);
 }
 
-
-int	parse_map(char *filename)
+char	**parse_map(char *filename, int *rows, int *cols)
 {
-	char	**map;
-	int		rows = 0;
 	int		fd;
+	char	**map;
+	char	*line;
+	int		i;
 
+	line = NULL;
 	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	map = ft_split(get_next_line(fd), '\n');
-	close(fd);
-	if (!is_uniform_map(map, rows) ||
-		!is_rectangular_map(map) ||
-		!is_valid_map(map, rows, ft_strlen(map[0])) ||
-		!is_closed_map(map, rows, ft_strlen(map[0])) ||
-		!is_valid_path(map, rows, ft_strlen(map[0])))
+	if (fd == -1)
+		return (NULL);
+	*rows = 0;
+	*cols = 0;
+	while (get_next_line(fd) > 0)
 	{
-		ft_free_str(map);
-		return (0);
+		if (*cols == 0)
+			*cols = ft_strlen(line);
+		(*rows)++;
+		free(line);
 	}
-	ft_free_str(map);
-	return (1);
+	close(fd);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (NULL);
+	map = malloc((*rows) * sizeof(char *));
+	if (!map)
+		return (NULL);
+	i = 0;
+	while (get_next_line(fd) > 0)
+	{
+		map[i] = line;
+		i++;
+	}
+	close(fd);
+	return (map);
 }
+
