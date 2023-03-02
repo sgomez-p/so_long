@@ -6,7 +6,7 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/02 13:01:54 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/02 13:04:30 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,7 +93,7 @@ git: fclean
 	@read -p "Name the commit: " commit ;\
 	git commit -m "$$commit" ;\
 	read -p "Check the files..." -t 20;
-	@git push origin master ;
+	@git push ;
 clean:
 			$(MAKE) clean -C $(LIBFT_DIR)
 			$(RM) $(OBJS)
