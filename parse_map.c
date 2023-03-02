@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/02/24 12:47:19 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/02 09:03:25 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,172 +20,246 @@
 #define ERROR "Error\n"
 #define VALID "Valid map\n"
 
-
-size_t	ft_strlen(const char *str)
+int is_uniform_map(char **map, int fd)
 {
-	int	i;
+    int line;
+    int map_len;
 
-	i = 0;
-	while (str[i] != '\0')
+    line = 0;
+    map_len = 0;
+    while (map[map_len])
+        map_len++;
+    while (map[line])
+    {
+        if (ft_strlen(map[line]) == 0)
+            return (0);
+        if (line == 0 || line == map_len - 1)
+        {
+            if (ft_strchr(map[line], '1') == NULL ||
+                ft_strchr(map[line], '0') != NULL ||
+                ft_strchr(map[line], 'C') != NULL ||
+                ft_strchr(map[line], 'E') == NULL)
+                return (0);
+        }
+        else
+        {
+            if (ft_strchr(map[line], '1') == NULL ||
+                ft_strchr(map[line], '0') != NULL ||
+                ft_strchr(map[line], 'C') != NULL ||
+                ft_strchr(map[line], 'E') != NULL)
+                return (0);
+        }
+		char *line;
+
+		while (1) 
+		{
+			line = get_next_line(fd);
+			if (line == NULL) 
+			{
+				break;
+			}
+		}
+	}
+	    if (!line)
+        return (0);
+    return (1);
+}
+
+
+int is_rectangular_map(char **map)
+{
+	int i;
+	int cols;
+	int rows;
+	i = 1;
+	cols = ft_strlen(map[0]);
+	rows = 0;
+	while (map[rows])
+		rows++;
+	while (i < rows)
 	{
+		if ((int)ft_strlen(map[i]) != cols)
+			return (0);
 		i++;
 	}
-	return (i);
+	return (1);
 }
-
-int is_uniform_map(char *filename)
-{
-    int fd, row_len, first_row_len;
-    char *line;
-
-    fd = open(filename, O_RDONLY);
-    if (fd < 0)
-        return 0;
-
-    // Lee la primera línea para obtener su longitud
-    line = get_next_line(fd);
-    if (line < 0)
-        return 0;
-    first_row_len = strlen(line);
-    free(line);
-
-    // Lee el resto de líneas y comprueba que tengan la misma longitud que la primera
-    while ((line = get_next_line(fd)) > 0) {
-        row_len = strlen(line);
-        if (row_len != first_row_len) {
-            free(line);
-            close(fd);
-            return 0;
-        }
-        free(line);
-    }
-    if (line < 0) {
-        close(fd);
-        return 0;
-    }
-
-    // Cierra el archivo y devuelve 1 si todas las líneas tienen la misma longitud
-    close(fd);
-    return 1;
-}
-
 
 int is_valid_map(char **map, int rows, int cols)
 {
-    int has_player = 0;
-    int has_exit = 0;
-    int i = 0, j;
+	int has_player = 0;
+	int has_exit = 0;
+	int i = 0, j;
 
-    while (i < rows)
-    {
-        j = 0;
-        while (j < cols)
-        {
-            if (map[i][j] == 'P')
-            {
-                if (has_player)
-                    return (0);
-                has_player = 1;
-            }
-            else if (map[i][j] == 'E')
-            {
-                if (has_exit)
-                    return (0);
-                has_exit = 1;
-            }
-            else if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'C')
-                return (0);
-            j++;
-        }
-        i++;
-    }
-    return (has_player && has_exit);
-}
-
-int is_rectangular_map(char **map, int rows, int cols)
-{
-    int i = 0;
-
-    while (i < rows)
-    {
-        if (ft_strlen(map[i]) != cols)
-            return (0);
-        i++;
-    }
-    return (1);
+	while (i < rows)
+	{
+		j = 0;
+		while (j < cols)
+		{
+			if (map[i][j] == 'P')
+			{
+				if (has_player)
+					return (0);
+				has_player = 1;
+			}
+			else if (map[i][j] == 'E')
+			{
+				if (has_exit)
+					return (0);
+				has_exit = 1;
+			}
+			else if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'C')
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (has_player && has_exit);
 }
 
 int is_closed_map(char **map, int rows, int cols)
 {
-    int i = 0;
+	int i = 0;
 
-    while (i < cols) // checkeamos filas(row)
-    {
-        if (map[0][i] != '1' || map[rows - 1][i] != '1')
-            return (0);
-        i++;
-    }
-    i = 0;
-    while (i < rows) // checkeamos columnas
-    {
-        if (map[i][0] != '1' || map[i][cols - 1] != '1')
-            return (0);
-        i++;
-    }
-    return (1);
+	while (i < cols) // checkeamos filas(row)
+	{
+		if (map[0][i] != '1' || map[rows - 1][i] != '1')
+			return (0);
+		i++;
+	}
+	i = 0;
+	while (i < rows) // checkeamos columnas
+	{
+		if (map[i][0] != '1' || map[i][cols - 1] != '1')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int has_valid_path(char **map, int rows, int cols, int i, int j)
 {
-    if (i < 0 || j < 0 || i >= rows || j >= cols)
-        return (0);
-    if (map[i][j] == '1' || map[i][j] == 'V')
-        return (0);
-    if (map[i][j] == 'E')
-        return (1);
-    map[i][j] = 'V'; // porq
-    if (has_valid_path(map, rows, cols, i - 1, j)
-        || has_valid_path(map, rows, cols, i, j - 1)
-        || has_valid_path(map, rows, cols, i + 1, j)
-        || has_valid_path(map, rows, cols, i, j + 1))
-        return (1);
-    return (0);
+	if (i < 0 || j < 0 || i >= rows || j >= cols)
+		return (0);
+	if (map[i][j] == '1' || map[i][j] == 'V')
+		return (0);
+	if (map[i][j] == 'E')
+		return (1);
+	map[i][j] = 'V';
+	if (has_valid_path(map, rows, cols, i - 1, j) || has_valid_path(map, rows, cols, i, j - 1) || has_valid_path(map, rows, cols, i + 1, j) || has_valid_path(map, rows, cols, i, j + 1))
+		return (1);
+	return (0);
 }
 
-int is_valid_path(char **map, int rows, int cols)
+void	ft_free_str(char **str)
 {
-    int i = 0, j;
+	int	i;
 
-    while (i < rows)
+	if (!str)
+		return ;
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+
+int is_valid_path_helper(char **map, int rows, int cols, int row, int col)
+{
+    // Comprobar si hemos llegado a la posición final 'C'
+    if (map[row][col] == 'C')
+        return 1;
+
+    // Marcar la posición actual como visitada
+    map[row][col] = 'V';
+
+    // Comprobar si hay un camino válido hacia arriba
+    if (row > 0 && map[row - 1][col] != 'W' && map[row - 1][col] != 'V')
     {
-        j = 0;
-        while (j < cols)
-        {
-            if (map[i][j] == 'P')
-                return (has_valid_path(map, rows, cols, i, j));
-            j++;
-        }
-        i++;
+        if (is_valid_path_helper(map, rows, cols, row - 1, col))
+            return 1;
     }
-    return (0);
-}
 
+    // Comprobar si hay un camino válido hacia abajo
+    if (row < rows - 1 && map[row + 1][col] != 'W' && map[row + 1][col] != 'V')
+    {
+        if (is_valid_path_helper(map, rows, cols, row + 1, col))
+            return 1;
+    }
 
-int main(void)
-{
-    void *mlx_ptr;
-    void *win_ptr;
-    void *img_ptr;
-    int width = 800;
-    int height = 600;
-    char *filename = "image.xpm";
+    // Comprobar si hay un camino válido hacia la izquierda
+    if (col > 0 && map[row][col - 1] != 'W' && map[row][col - 1] != 'V')
+    {
+        if (is_valid_path_helper(map, rows, cols, row, col - 1))
+            return 1;
+    }
 
-    mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr, width, height, "Map Viewer");
-    img_ptr = mlx_xpm_file_to_image(mlx_ptr, filename, &width, &height);
-    mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
-    mlx_loop(mlx_ptr);
+    // Comprobar si hay un camino válido hacia la derecha
+    if (col < cols - 1 && map[row][col + 1] != 'W' && map[row][col + 1] != 'V')
+    {
+        if (is_valid_path_helper(map, rows, cols, row, col + 1))
+            return 1;
+    }
+
+    // Si no hay camino válido desde la posición actual, marcar la posición como no visitada
+    map[row][col] = '.';
 
     return 0;
 }
 
+int is_valid_path(char **map, int rows, int cols)
+{
+    int i, j;
+    int start_row = -1, start_col = -1;
+
+    // Encontrar la posición inicial 'P'
+    for (i = 0; i < rows; i++)
+    {
+        for (j = 0; j < cols; j++)
+        {
+            if (map[i][j] == 'P')
+            {
+                start_row = i;
+                start_col = j;
+                break;
+            }
+        }
+        if (start_row != -1 && start_col != -1)
+            break;
+    }
+
+    // Si no hay posición inicial 'P' en el mapa, devolver 0
+    if (start_row == -1 || start_col == -1)
+        return 0;
+
+    // Comprobar si hay un camino válido desde la posición inicial hasta la final
+    return is_valid_path_helper(map, rows, cols, start_row, start_col);
+}
+
+
+int	parse_map(char *filename)
+{
+	char	**map;
+	int		rows = 0;
+	int		fd;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	map = ft_split(get_next_line(fd), '\n');
+	close(fd);
+	if (!is_uniform_map(map, rows) ||
+		!is_rectangular_map(map) ||
+		!is_valid_map(map, rows, ft_strlen(map[0])) ||
+		!is_closed_map(map, rows, ft_strlen(map[0])) ||
+		!is_valid_path(map, rows, ft_strlen(map[0])))
+	{
+		ft_free_str(map);
+		return (0);
+	}
+	ft_free_str(map);
+	return (1);
+}

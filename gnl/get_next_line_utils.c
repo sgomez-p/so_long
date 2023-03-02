@@ -12,9 +12,9 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen22(const char *s)
+size_t ft_strlen2(const char *s)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (s[i] != '\0')
@@ -22,7 +22,7 @@ size_t	ft_strlen22(const char *s)
 	return (i);
 }
 
-char	*ft_strchr2(char *s, int c)
+char *ft_strchr2(char *s, int c)
 {
 	if (!s)
 		return (0);
@@ -37,11 +37,11 @@ char	*ft_strchr2(char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin2(char *buffer, char *buff)
+char *ft_strjoin2(char *buffer, char *buff)
 {
-	size_t	i;
-	size_t	j;
-	char	*str;
+	size_t i;
+	size_t j;
+	char *str;
 
 	if (!buffer)
 	{
@@ -56,7 +56,7 @@ char	*ft_strjoin2(char *buffer, char *buff)
 	i = -1;
 	j = 0;
 	while (buffer[++i] != '\0')
-			str[i] = buffer[i];
+		str[i] = buffer[i];
 	while (buff[j] != '\0')
 		str[i++] = buff[j++];
 	str[i] = '\0';
@@ -64,10 +64,10 @@ char	*ft_strjoin2(char *buffer, char *buff)
 	return (str);
 }
 
-char	*ft_get_line(char *buffer)
+char *ft_get_line(char *buffer)
 {
-	int		i;
-	char	*str;
+	int i;
+	char *str;
 
 	i = 0;
 	if (!buffer[i])
@@ -92,11 +92,11 @@ char	*ft_get_line(char *buffer)
 	return (str);
 }
 
-char	*ft_new_line(char *buffer)
+char *ft_new_line(char *buffer)
 {
-	int		i;
-	int		j;
-	char	*line;
+	int i;
+	int j;
+	char *line;
 
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')

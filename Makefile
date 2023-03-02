@@ -6,82 +6,54 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/02/24 12:50:44 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/02 09:16:23 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = so_long.out
+NAME		= so_long
+SRCS		= main.c \
+			  so_long.c \
+			  parse_map.c \
+			  gnl/get_next_line.c \
+			  gnl/get_next_line_utils.c
 
-SRC = $(MAIN_SRC) $(SRC_ERR) $(SRC_GNL) $(SRC_MAP) $(SRC_GAME)
+OBJS		= ${SRCS:.c=.o}
 
-MAIN_SRC = parse_map.c so_long.c
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror -I./libft -I./gnl -I./minilibx -g
+RM			= rm -f
 
-LIBFT_A = libft.a
-LIBF_DIR = libft/
-LIBFT  = $(addprefix $(LIBF_DIR), $(LIBFT_A))
+LIBFT_DIR	= ./libft
+LIBFT		= libft.a
+LIBFT_LIB	= $(addprefix $(LIBFT_DIR)/, $(LIBFT))
 
-GNL = get_next_line.c get_next_line_utils.c
-SRC_GNL = $(addprefix gnl/, $(GNL))
+MLX_DIR		= ./minilibx
+MLX			= libmlx.a
+MLX_LIB		= $(addprefix $(MLX_DIR)/, $(MLX))
 
-MAP = 
-SRC_MAP = $(addprefix map/, $(MAP))
+all:		$(NAME)
 
-GAME =	
-SRC_GAME = $(addprefix game/, $(GAME))
+$(NAME):	$(OBJS)
+			$(MAKE) -C $(LIBFT_DIR)
+			$(MAKE) -C $(MLX_DIR)
+			$(CC) $(CFLAGS) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lX11 -lXext -lm -o $(NAME) $(OBJS)
 
-OBJ = *.o
-
-FLAGS = -lmlx -lXext -lX11 -Wall -Wextra -Werror
-INCLUDE =  -framework OpenGL -framework AppKit
-
-NONE='\033[0m'
-GREEN='\033[32m'
-YELLOW='\033[33m'
-GRAY='\033[2;37m'
-CURSIVE='\033[3m'
-
-all: $(NAME)
-
-$(NAME): $(OBJ)
-	@echo $(CURSIVE)$(GRAY) "     - Making libft..." $(NONE)
-	@make -C $(LIBF_DIR)
-	@echo $(CURSIVE)$(GRAY) "     - Compiling $(NAME)..." $(NONE)
-	@gcc $(FLAGS) $(OBJ) $(LIBFT) $(INCLUDE) -o $(NAME)
-	@echo $(GREEN)"- Compiled -"$(NONE)
-
-$(OBJ): $(SRC)
-	@echo $(CURSIVE)$(GRAY) "     - Making object files..." $(NONE)
-	@gcc $(FALGS) -c $(SRC)
-
-exe: re
-	@make -C ./ clean
-	@echo $(YELLOW)"     - Executing $(NAME)... \n"$(NONE)
-	@./$(NAME) $(m)
-	@echo $(YELLOW)"\n     - Done -"$(NONE)
-
-play: all
-	@echo $(YELLOW)"     - Playing all maps... \n"$(NONE)
-	@make -C ./ clean
-	@./$(NAME) map_files/map_0.ber
-
-norm:
-	@echo $(GRAY) ""
-	@norminette $(SRC) *.h */*.h
-	@echo $(NONE) ""
-
-libftnorm:
-	@echo $(GRAY) ""
-	@make -C $(LIBF_DIR) norm HEADER_DIRECTORY=.
-	@echo $(NONE) ""
+git: fclean
+	@echo "\t${BIPurple}>>Push To Git<<${NoColor}"
+	@git add * ;
+	@read -p "Name the commit: " commit ;\
+	git commit -m "$$commit" ;\
+	git push;
 
 clean:
-	@echo $(CURSIVE)$(GRAY) "     - Removing object files..." $(NONE)
-	@rm -rf $(OBJ)
-	@make -C $(LIBF_DIR) clean
+			$(MAKE) clean -C $(LIBFT_DIR)
+			$(MAKE) clean -C $(MLX_DIR)
+			$(RM) $(OBJS)
 
-fclean: clean
-	@echo $(CURSIVE)$(GRAY) "     - Removing $(NAME)..." $(NONE)
-	@rm -rf $(NAME)
-	@make -C $(LIBF_DIR) fclean
+fclean:		clean
+			$(MAKE) fclean -C $(LIBFT_DIR)
+			$(RM) $(NAME)
 
-re: fclean all
+re:			fclean all
+
+.PHONY:		all clean fclean re
