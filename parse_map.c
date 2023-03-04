@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/02 13:02:34 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/04 12:34:40 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,40 +239,34 @@ int is_valid_path(char **map, int rows, int cols)
     return is_valid_path_helper(map, rows, cols, start_row, start_col);
 }
 
-char	**parse_map(char *filename, int *rows, int *cols)
+
+
+t_map	*parse_map(char *file_path)
 {
 	int		fd;
-	char	**map;
 	char	*line;
-	int		i;
+	t_map	*map;
 
-	line = NULL;
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
+	fd = open(file_path, O_RDONLY);
+	if (fd < 0)
 		return (NULL);
-	*rows = 0;
-	*cols = 0;
-	while (get_next_line(fd) > 0)
-	{
-		if (*cols == 0)
-			*cols = ft_strlen(line);
-		(*rows)++;
-		free(line);
-	}
-	close(fd);
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-		return (NULL);
-	map = malloc((*rows) * sizeof(char *));
+	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
-	i = 0;
+	map->height = 0;
+	map->width = 0;
+	map->content = NULL;
 	while (get_next_line(fd) > 0)
 	{
-		map[i] = line;
-		i++;
+		map->content = ft_lstadd_back(&(map->content),
+			ft_lstnew(line));
+		map->height++;
+		free(line);
 	}
+	if (line)
+		free(line);
 	close(fd);
+	map->width = ft_strlen(map->content->content);
 	return (map);
 }
 

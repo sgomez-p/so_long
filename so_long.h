@@ -6,30 +6,41 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/02 12:49:38 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/04 12:57:31 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include <errno.h>
-# include <limits.h>
-# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <mlx.h>
+# include "gnl/get_next_line.h"
+# include "mlx.h"
 # include "libft/libft.h"
-// # include "minilibx/mlx.h" //mirar si cuando se entrega hay q quitar carpeta de minilibx
 
+# define TILE_SIZE 32
 
+typedef struct	t_map
+{
+	int		width;
+	int		height;
+	char	**grid;
+	void	*mlx;
+	void	*win;
+	void	*floor_img;
+	void	*wall_img;
+	void	*player_img;
+	void	*exit_img;
+	int		tile_width;
+	int		tile_height;
+}				t_map;
 
-int	is_uniform_map(char **map, int fd);
-int is_valid_map(char **map, int rows, int cols);
-char	**parse_map(char *filename, int *rows, int *cols);
+int		read_map(char *file);
+t_map	*parse_map(char *file_path);
+int		run_game(t_map *map);
+void	draw_map(t_map *map);
 
 #endif
