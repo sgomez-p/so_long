@@ -3,54 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/28 11:56:51 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/17 13:12:21 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/20 12:00:17 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/26 16:58:21 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-size_t	ft_nb_len(int nb)
+static char	*change(char *x, unsigned int number, long int len)
 {
-	int	len;
+	while (number > 0)
+	{
+		x[len--] = 48 + (number % 10);
+		number = number / 10;
+	}
+	return (x);
+}
+
+static long int	ft_len(int n)
+{
+	int					len;
 
 	len = 0;
-	if (nb <= 0)
-		len++;
-	while (nb)
+	if (n <= 0)
+		len = 1;
+	while (n != 0)
 	{
 		len++;
-		nb = nb / 10;
+		n = n / 10;
 	}
 	return (len);
 }
 
-char	*ft_itoa(int n, int base)
+char	*ft_itoa(int n)
 {
-	int		len;
-	char	*str;
-	long	nb;
+	char				*x;
+	long int			lon;
+	unsigned int		num;
+	int					sign;
 
-	len = ft_nb_len(n);
-	nb = n;
-	str = malloc(sizeof(char) * (len + 1));
-	if (!(str))
-		return (NULL);
-	if (nb < 0)
+	sign = 1;
+	lon = ft_len(n);
+	x = (char *)malloc(sizeof(char) * (lon + 1));
+	if (!(x))
+		return (0);
+	x[lon--] = '\0';
+	if (n == 0)
+		x[0] = '0';
+	if (n < 0)
 	{
-		str[0] = '-';
-		nb = -nb;
+		sign *= -1;
+		num = n * -1;
+		x[0] = '-';
 	}
-	if (nb == 0)
-		str[0] = '0';
-	str[len--] = '\0';
-	while (nb)
-	{
-		str[len] = nb % base + '0';
-		len--;
-		nb = nb / base;
-	}
-	return (str);
+	else
+		num = n;
+	x = change(x, num, lon);
+	return (x);
 }
+
+/*
+int main(void)
+{
+	printf("%s\n", ft_itoa(123156));
+	return (0);
+}*/

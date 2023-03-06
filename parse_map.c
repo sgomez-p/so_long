@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/04 12:34:40 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/06 12:51:39 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft/libft.h"
-#include "gnl/get_next_line.h"
 
 #define ERROR "Error\n"
 #define VALID "Valid map\n"
@@ -255,18 +254,23 @@ t_map	*parse_map(char *file_path)
 		return (NULL);
 	map->height = 0;
 	map->width = 0;
-	map->content = NULL;
-	while (get_next_line(fd) > 0)
+	map->current = NULL;
+	line = NULL;
+	while (get_next_line(fd))
 	{
-		map->content = ft_lstadd_back(&(map->content),
-			ft_lstnew(line));
+		line = get_next_line(fd);
+		ft_lstadd_back(&(map->current), ft_lstnew(line));
 		map->height++;
-		free(line);
 	}
 	if (line)
-		free(line);
+	{
+		ft_lstadd_back(&(map->current), ft_lstnew(line));
+		map->height++;
+	}
 	close(fd);
-	map->width = ft_strlen(map->content->content);
+	if (map->height > 0)
+		map->width = ft_strlen(ft_lstlast(map->current)->content);
+	else
+		map->width = 0;
 	return (map);
 }
-

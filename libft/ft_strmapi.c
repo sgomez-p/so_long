@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   strmapi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/28 12:40:51 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/09/28 13:21:40 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/20 12:58:44 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/30 09:59:56 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+char	*ft_strmapi(char const	*s, char (*f)(unsigned int, char))
 {
-	size_t	len;
-	size_t	i;
-	char	*str;
+	unsigned int	i;
+	char			*str;
 
-	i = 0;
-	if (!s || !f)
+	if (!(s) || !(f))
 		return (0);
-	len = ft_strlen(s);
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen((char *)s) + 1));
 	if (!(str))
 		return (0);
-	while (i < len)
+	i = 0;
+	while (s[i])
 	{
 		str[i] = f(i, s[i]);
 		i++;
@@ -33,3 +31,20 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	str[i] = '\0';
 	return (str);
 }
+
+/*
+char my_func(unsigned int i, char str)
+ {
+ 	printf("My inner function: index = %d and %c\n", i, str);
+ 	return str - 32;
+ }
+
+ int main()
+{
+ 	char str[10] = "hello.";
+ 	printf("The result is %s\n", str);
+ 	char *result = ft_strmapi(str, my_func);
+ 	printf("The result is %s\n", result);
+	return 0;
+ }
+*/

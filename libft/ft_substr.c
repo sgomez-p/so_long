@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   substr.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 13:05:32 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/13 15:12:06 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/16 12:50:20 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/27 12:59:49 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,38 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*substr;
-	int		i;
+	unsigned int		i;
+	unsigned int		j;
+	char				*substr;
 
 	i = 0;
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s))
-	{
-		substr = (char *)malloc(sizeof(char) * 1);
-		if (!substr)
-			return (NULL);
-		substr[0] = 0;
-		return (substr);
-	}
-	if (len > ft_strlen(s))
-		len = ft_strlen(s);
+	j = 0;
+	if (len > ft_strlen((char *)s) - start - 1)
+		len = ft_strlen((char *)s) - start;
+	if (start > ft_strlen((char *)s))
+		return (ft_strdup(""));
 	substr = (char *)malloc(sizeof(char) * (len + 1));
-	if (!substr)
-		return (NULL);
-	while (len-- > 0)
+	if (!(substr))
+		return (0);
+	while (s[i])
 	{
-		substr[i++] = s[start++];
+		if (i >= start && j < len)
+		{
+			substr[j] = s[i];
+			j++;
+		}
+		i++;
 	}
-	substr[i] = 0;
+	substr[j] = 0;
 	return (substr);
 }
+
+/*int main()
+{
+	char* str;
+
+	str = ft_substr("Hello, 42Seoul!", 7, 2);
+	printf("%s\n", str);
+
+	return 0;
+}*/

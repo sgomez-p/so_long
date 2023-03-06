@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen.c                                           :+:      :+:    :+:   */
+/*   ft_putunsignbr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/12 10:09:40 by adgutier          #+#    #+#             */
-/*   Updated: 2022/09/27 12:50:11 by adgutier         ###   ########.fr       */
+/*   Created: 2022/10/03 16:08:47 by adgutier          #+#    #+#             */
+/*   Updated: 2022/10/03 16:08:47 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(char *str)
+int	ft_decimal_unsig(unsigned int nb) 
 {
-	int	i;
+	char	*str;
+	int		i;
 
-	if (!str)
-		return (0);
 	i = 0;
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	str = ft_itoa_base(nb, "0123456789");
+	i = i + ft_putstr(str);
+	free(str);
+	return(i);
 }
-
-/*int main (){
-
-char	*str;
-
-	str = "hola";
-	 printf("%d",ft_strlen(str));
-
-}
-*/

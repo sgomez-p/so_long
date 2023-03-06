@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   isalpha.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/16 14:14:49 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/09/16 11:11:55 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/07/14 12:47:18 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 13:29:25 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,18 @@
 
 int	ft_isalpha(int c)
 {
-	if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z'))
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+	{
 		return (1);
+	}
 	return (0);
 }
+
+/*
+int	main(void)
+{
+	char str[] = "patruzecisidoi";
+
+	printf("%d", ft_isalpha(str));
+	return (0);
+}*/

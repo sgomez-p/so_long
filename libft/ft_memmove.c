@@ -1,38 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   memmove.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/15 11:00:53 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/10 14:38:56 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/14 12:53:40 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 13:22:15 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+void	*ft_memmove(void *dst, const void *src, int len)
 {
-	char	*s;
-	char	*d;
-	size_t	i;
+	char	*deesti;
+	char	*source;
 
-	s = (char *)src;
-	d = (char *)dst;
-	if (!s && !d)
-		return (NULL);
-	i = 0;
-	if (d > s)
-		while (len-- > 0)
-			d[len] = s[len];
-	else
+	deesti = (char *)dst;
+	source = (char *)src;
+	if (deesti > source)
 	{
-		while (i < len)
-		{
-			d[i] = s[i];
-			i++;
-		}
+		while (len--)
+			deesti[len] = source[len];
 	}
+	else if (deesti < source)
+		ft_memcpy(dst, src, len);
 	return (dst);
 }
+
+/*
+#include <unistd.h>
+
+void	*ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	int		count;
+
+	count = 0;
+	while (str[count] != '\0')
+	{
+		ft_putchar(str[count]);
+		count++;
+	}
+}
+
+
+int main(void)
+{
+	char str[50]="bferfcwefwfw";
+	char str1[50]="basic la chupa";
+	
+
+	ft_memmove(str, str1, 3);
+	ft_putstr(str);
+}*/

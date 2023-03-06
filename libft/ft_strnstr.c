@@ -1,38 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   strnstr.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/19 15:26:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/10 12:57:02 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/16 09:59:03 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/30 09:59:26 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *s1, const char *s2, size_t len)
+char	*ft_strnstr(const char	*haystack, const char	*needle, size_t len)
 {
-	size_t	p;
-	size_t	c;
+	unsigned int	c;
 
-	p = 0;
-	c = 0;
-	if (s2[0] == 0)
-		return ((char *)s1);
-	while (p < len && s1[p] != 0)
+	if (!*needle)
+		return ((char *)haystack);
+	else if (!len)
+		return (0);
+	if (*needle == 0 || haystack == needle)
+		return ((char *)haystack);
+	c = ft_strlen((char *)needle);
+	while (*haystack && c <= len--)
 	{
-		while (s1[p + c] == s2[c] && s1[p + c] && (p + c) < len)
-		{
-			if (s1[p + c] == 0 && s2[c] == 0)
-				return ((char *)&s1[p]);
-			c++;
-		}
-		if (s2[c] == 0)
-			return ((char *)s1 + p);
-		p++;
-		c = 0;
+		if (!(ft_strncmp((char *)haystack, (char *)needle, c)))
+			return ((char *)haystack);
+		haystack++;
 	}
 	return (0);
 }
+
+/*
+ int main () {
+    const char haystack[20] = "TutorialsPoint";
+    const char needle[10] = "to";
+    char *result;
+
+    result = ft_strnstr(haystack, needle, 4);
+    printf("The substring is: %s\n", result);
+    return(0);
+ }*/

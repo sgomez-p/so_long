@@ -1,26 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   memset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 10:29:26 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/10 13:00:48 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/13 20:10:16 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 10:03:25 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset(void *b, int c, size_t len)
+void	*ft_memset(void *b, int c, int len)
 {
-	size_t			i;
+	unsigned char	*p;
 
-	i = 0;
-	while (i < len)
+	p = (unsigned char *)b;
+	while (len > 0)
 	{
-		*(unsigned char *)(b + i) = (unsigned char)c;
-		i++;
+		*(p++) = (unsigned char)c;
+		len--;
 	}
 	return (b);
 }
+
+/*
+#include <unistd.h>
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	int		count;
+
+	count = 0;
+	while (str[count] != '\0')
+	{
+		ft_putchar(str[count]);
+		count++;
+	}
+}
+
+
+int main(void)
+{
+	char str[50]="basic la chupa";
+	
+
+	ft_memset(str, 'p', 3);
+	ft_putstr(str);
+}
+*/

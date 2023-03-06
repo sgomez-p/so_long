@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 11:45:26 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/11 17:40:52 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/16 11:28:10 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/27 12:58:21 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t count, size_t size)
+void	*ft_calloc(size_t numcarac, size_t size)
 {
-	void	*temp;
+	void	*ptr;
 
-	if (count == 18446744073709551615UL || size == 18446744073709551615UL)
-		return (NULL);
-	temp = (void *) malloc(size * count);
-	if (!temp)
-		return (NULL);
-	ft_bzero(temp, size * count);
-	return (temp);
+	if (numcarac == 18446744073709551615UL && size == 18446744073709551615UL)
+		return (0);
+	ptr = malloc(numcarac * size);
+	if (ptr == NULL)
+		return (ptr);
+	ft_bzero(ptr, size * numcarac);
+	return (ptr);
 }

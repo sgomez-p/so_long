@@ -1,41 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   strjoin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 15:01:43 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/09/26 16:26:39 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/17 12:53:22 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/27 12:53:29 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
-{	
-	char	*memory;
-	size_t	i;
-	size_t	j;
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		i;
+	int		len1;
+	int		len2;
+	char	*str;
 
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	memory = (char *)malloc(sizeof(*s1) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!memory)
-		return (NULL);
-	while (s1[i])
+	if (s2)
 	{
-			memory[j++] = s1[i];
-			i++;
+		len1 = ft_strlen(s1);
+		len2 = ft_strlen(s2);
+		str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+		if (str == NULL)
+			return (NULL);
+		i = -1;
+		if (s1)
+		{
+			while (s1[++i])
+			str[i] = s1[i];
+		}
+		i = -1;
+		while (s2[++i])
+		{
+			str[len1] = s2[i];
+			len1++;
+		}
+		str[len1] = '\0';
+		return (str);
 	}
-	i = 0;
-	while (s2[i])
-	{
-			memory[j++] = s2[i];
-			i++;
-	}
-	memory[j] = 0;
-	return (memory);
+	return (NULL);
 }
+
+

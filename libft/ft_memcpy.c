@@ -1,28 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   memcpy.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/15 12:08:04 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/10 14:37:49 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/14 10:39:36 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 13:21:48 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *tocpy, int sizetocpy)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (!(dst) && !(src))
-		return (NULL);
-	while (i < n)
+	if (!dest && !tocpy)
+		return (0);
+	while (i < sizetocpy)
 	{
-		*(char *)(dst + i) = *(char *)(src + i);
+		((unsigned char *)dest)[i] = ((unsigned char *)tocpy)[i];
 		i++;
 	}
-	return (dst);
+	return (dest);
 }
+
+/*
+#include <unistd.h>
+
+void	*ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	int		count;
+
+	count = 0;
+	while (str[count] != '\0')
+	{
+		ft_putchar(str[count]);
+		count++;
+	}
+}
+
+
+int main(void)
+{
+	char str[50]="bferfcwefwfw";
+	char str1[50]="basic la chupa";
+	
+
+	ft_memcpy(str, str1, 3);
+	ft_putstr(str);
+}
+*/

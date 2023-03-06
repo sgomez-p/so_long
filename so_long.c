@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/04 12:33:31 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/06 13:00:34 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ int	read_map(char *file)
 	}
 	return (-1); // Should never reach here
 }
-
-#include "so_long.h"
-#include "mlx.h"
 
 void	draw_map(t_map *map)
 {
@@ -83,15 +80,17 @@ int		run_game(t_map *map)
 
 void	free_map(t_map *map)
 {
-	int	i;
+	t_list	*current;
+	t_list	*tmp;
 
-	i = 0;
-	while (i < map->height)
+	current = map->current;
+	while (current)
 	{
-		free(map->grid[i]);
-		i++;
+		tmp = current;
+		current = current->next;
+		free(tmp->content);
+		free(tmp);
 	}
-	free(map->grid);
 	free(map);
 }
 
@@ -99,13 +98,12 @@ int main(int argc, char **argv)
 {
 	t_map	*map;
 
-	map = (t_map *)malloc(sizeof(t_map));
 	if (argc != 2)
 	{
 		ft_putstr_fd("Error: Invalid number of arguments\n", 2);
 		return (EXIT_FAILURE);
 	}
-	map = parse_map(argv[1], &(map->height), &(map->width));
+	map = parse_map(argv[1]);
 	if (!map)
 	{
 		ft_putstr_fd("Error: Invalid map\n", 2);
@@ -117,4 +115,3 @@ int main(int argc, char **argv)
 	free_map(map);
 	return (EXIT_SUCCESS);
 }
-

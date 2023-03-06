@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/29 12:42:31 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/09/29 12:42:32 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/20 15:38:13 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 12:22:16 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

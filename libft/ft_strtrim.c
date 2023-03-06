@@ -1,38 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   strtrim.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/27 12:43:30 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/11 10:57:39 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/19 13:20:44 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/23 12:56:10 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char *set)
 {
+	size_t	front;
+	size_t	rear;
 	char	*str;
-	size_t	i;
-	size_t	start;
-	size_t	end;
 
-	if (!s1 || !set)
-		return (NULL);
-	start = 0;
-	while (s1[start] && ft_strchr(set, s1[start]))
-		start++;
-	end = ft_strlen(s1);
-	while (end > start && ft_strchr(set, s1[end - 1]))
-		end--;
-	str = (char *)malloc(sizeof(*s1) * (end - start + 1));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (start < end)
-		str[i++] = s1[start++];
-	str[i] = 0;
+	str = 0;
+	if (s1 != 0 && set != 0)
+	{
+		front = 0;
+		rear = ft_strlen(s1);
+		while (s1[front] && ft_strchr(set, s1[front]))
+			front++;
+		while (s1[rear - 1] && ft_strchr(set, s1[rear - 1]) && rear > front)
+			rear--;
+		str = (char *)malloc(sizeof(char) * (rear - front + 1));
+		if (str)
+			ft_strlcpy(str, &s1[front], rear - front + 1);
+	}
 	return (str);
 }
+
+/*
+int main()
+{
+	printf("%s\n", ft_strtrim("abqbc", "abc"));
+	printf("%s\n", ft_strtrim("xavocadoyz", "xyz"));
+	return 0;
+}*/

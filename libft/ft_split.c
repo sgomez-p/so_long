@@ -1,78 +1,104 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: adgutier <adgutier@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/26 15:54:05 by sgomez-p          #+#    #+#             */
-/*   Updated: 2022/10/17 10:23:15 by sgomez-p         ###   ########.fr       */
+/*   Created: 2022/09/19 10:32:11 by adgutier          #+#    #+#             */
+/*   Updated: 2022/09/30 10:03:05 by adgutier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_words(const char *str, char c)
+static void	free_matrix(char **matrix)
 {
 	int	i;
-	int	trigger;
 
 	i = 0;
-	trigger = 0;
-	while (*str)
+	while (matrix[i])
+		free(matrix[i]);
+	free(matrix);
+}
+
+static int	countwords(const char *str, char charset)
+{
+	int	i;
+	int	counter;
+
+	counter = 0;
+	i = 0;
+	while (str[i] != '\0')
 	{
-		if (*str != c && trigger == 0)
-		{
-			trigger = 1;
-			i++;
-		}
-		else if (*str == c)
-			trigger = 0;
-		str++;
+		if ((str[i + 1] == charset || str[i + 1] == '\0') == 1
+			&& (str[i] == charset || str[i] == '\0') == 0)
+			counter++;
+		i++;
 	}
+	return (counter);
+}
+
+unsigned int	countlet(const char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0' && str[i] != c)
+			i++;
 	return (i);
 }
 
-static char	*word_dup(const char *str, int start, int finish)
+static void	compara_split(char **matrix, const char *s, char c, int words)
 {
-	char	*word;
-	int		i;
+	int	n;
+	int	j;
 
-	i = 0;
-	word = malloc((finish - start + 1) * sizeof(char));
-	if (!word)
-		return (NULL);
-	while (start < finish)
-		word[i++] = str[start++];
-	word[i] = '\0';
-	return (word);
+	n = 0;
+	j = 0;
+	while (j < words)
+	{
+		while (*s == c)
+			s++;
+		matrix[j] = ft_calloc(countlet(s, c) + 1, sizeof(char));
+		if (!matrix[j])
+		{
+			free_matrix(matrix);
+			return ;
+		}	
+		while (*s != c && *s)
+			matrix[j][n++] = *s++;
+		n = 0;
+		j++;
+	}
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(const char *s, char c)
 {
-	size_t	i;
-	size_t	j;
-	int		index;
-	char	**split;
+	char	**matrix;
+	int		words;
 
 	if (!s)
-		return (NULL);
-	split = malloc((count_words(s, c) + 1) * sizeof(char *));
-	if (!split || (split == NULL))
 		return (0);
-	i = -1;
-	j = 0;
-	index = -1;
-	while (++i <= ft_strlen(s))
-	{
-		if (s[i] != c && index < 0)
-			index = i;
-		else if ((s[i] == c || i == ft_strlen(s)) && index >= 0)
-		{
-			split[j++] = word_dup(s, index, i);
-			index = -1;
-		}
-	}
-	split[j] = 0;
-	return (split);
+	words = countwords(s, c);
+	matrix = (char **)ft_calloc(words + 1, sizeof(char *));
+	if (!matrix)
+		return (0);
+	compara_split(matrix, s, c, words);
+	return (matrix);
 }
+
+/*
+int		main(void)
+{
+	int i = 0;
+	char **tab;
+		
+	tab = ft_split("me cago en to q no tira", ' ' );
+	while (i < 7)
+	{
+		printf("string %d : %s\n", i, tab[i]);
+		i++;
+	}
+	return (0);
+}*/
