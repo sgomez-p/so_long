@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/06 13:00:34 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:15:01 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	read_map(char *file)
 	return (-1); // Should never reach here
 }
 
+
 void	draw_map(t_map *map)
 {
 	int x;
@@ -54,10 +55,11 @@ void	draw_map(t_map *map)
 			else if (map->grid[y][x] == '0') // floor
 				mlx_put_image_to_window(map->mlx, map->win, map->floor_img, x * TILE_SIZE, y * TILE_SIZE);
 			else if (map->grid[y][x] == 'P') // player
-				mlx_put_image_to_window(map->mlx, map->win, map->player_img, x * TILE_SIZE, y * TILE_SIZE);
+				mlx_put_image_to_window(map->mlx, map->win, map->player_img,
+					x * TILE_SIZE, y * TILE_SIZE);
 			else if (map->grid[y][x] == 'E') // exit
 				mlx_put_image_to_window(map->mlx, map->win, map->exit_img, x * TILE_SIZE, y * TILE_SIZE);
-			y++;
+			x++;	
 		}
 		y++;
 	}
@@ -94,24 +96,28 @@ void	free_map(t_map *map)
 	free(map);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_map	*map;
+	void	*mlx_ptr;
+	void	*win_ptr;
 
 	if (argc != 2)
 	{
-		ft_putstr_fd("Error: Invalid number of arguments\n", 2);
-		return (EXIT_FAILURE);
+		ft_putstr_fd("Error\nUsage: ./so_long map.ber\n", 2);
+		return (1);
 	}
 	map = parse_map(argv[1]);
 	if (!map)
 	{
-		ft_putstr_fd("Error: Invalid map\n", 2);
-		return (EXIT_FAILURE);
+		ft_putstr_fd("Error\nInvalid map\n", 2);
+		return (1);
 	}
-	// Open a window using minilibx and display the map
-	run_game(map);
-	// Free allocated memory
-	free_map(map);
-	return (EXIT_SUCCESS);
+	mlx_ptr = mlx_init();
+	win_ptr = mlx_new_window(mlx_ptr, map->width * TILE_SIZE,
+			map->height * TILE_SIZE, "so_long");
+	draw_map(map);
+	mlx_loop(mlx_ptr);
+	mlx_destroy_window(mlx_ptr, win_ptr);
+	return (0);
 }

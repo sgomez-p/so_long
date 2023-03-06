@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/06 12:51:39 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:10:29 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,17 @@
 #define ERROR "Error\n"
 #define VALID "Valid map\n"
 
-int is_uniform_map(char **map, int fd)
+int is_uniform_map(char **map)
 {
     int line;
     int map_len;
+    int start_count;
+    int goal_count;
 
     line = 0;
     map_len = 0;
+    start_count = 0;
+    goal_count = 0;
     while (map[map_len])
         map_len++;
     while (map[line])
@@ -43,26 +47,21 @@ int is_uniform_map(char **map, int fd)
         else
         {
             if (ft_strchr(map[line], '1') == NULL ||
-                ft_strchr(map[line], '0') != NULL ||
-                ft_strchr(map[line], 'C') != NULL ||
-                ft_strchr(map[line], 'E') != NULL)
+                ft_strchr(map[line], '0') != NULL)
                 return (0);
+            if (ft_strchr(map[line], 'E') != NULL)
+                start_count++;
+            if (ft_strchr(map[line], 'C') != NULL)
+                goal_count++;
         }
-		char *line;
-
-		while (1) 
-		{
-			line = get_next_line(fd);
-			if (line == NULL) 
-			{
-				break;
-			}
-		}
-	}
-	    if (!line)
+        line++;
+    }
+    if (start_count != 1 || goal_count == 0)
         return (0);
     return (1);
 }
+
+
 
 
 int is_rectangular_map(char **map)
@@ -84,36 +83,34 @@ int is_rectangular_map(char **map)
 	return (1);
 }
 
-int is_valid_map(char **map, int rows, int cols)
+int is_valid_map(t_map *map)
 {
-	int has_player = 0;
-	int has_exit = 0;
-	int i = 0, j;
+    int i;
+    int j;
+    int start_count;
+    int end_count;
 
-	while (i < rows)
-	{
-		j = 0;
-		while (j < cols)
-		{
-			if (map[i][j] == 'P')
-			{
-				if (has_player)
-					return (0);
-				has_player = 1;
-			}
-			else if (map[i][j] == 'E')
-			{
-				if (has_exit)
-					return (0);
-				has_exit = 1;
-			}
-			else if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'C')
+    i = 0;
+    start_count = 0;
+    end_count = 0;
+    while (i < map->height)
+    {
+        j = 0;
+        while (j < map->width)
+        {
+			if (map->grid[i][j] != '1' && map->grid[i][j] != '0' && map->grid[i][j] != 'C' && map->grid[i][j] != 'E' && map->grid[i][j] != 'P')
 				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (has_player && has_exit);
+            if (map->grid[i][j] == 'P')
+                start_count++;
+            if (map->grid[i][j] == 'E')
+                end_count++;
+            j++;
+        }
+        i++;
+    }
+    if (start_count != 1 || end_count != 1)
+        return (0);
+    return (1);
 }
 
 int is_closed_map(char **map, int rows, int cols)
