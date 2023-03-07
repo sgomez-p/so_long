@@ -6,7 +6,7 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/06 19:18:47 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/07 10:12:10 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC			=	gcc
 SRCS		=	so_long.c parse_map.c libft/get_next_line.c libft/get_next_line_utils.c
 
 LIBFT		=	libft/libft.a
-CFLAGS		=	-Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS		=	-Wall -Wextra -Werror
 MLXFLAGS	=	-L ./mlx/ -lmlx -framework OpenGL -framework AppKit -lz
 RM			=	rm -f
 OBJS		=	$(SRCS:%.c=%.o)

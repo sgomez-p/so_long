@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/06 19:15:01 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/07 10:09:45 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_putstr_fd("Error\nUsage: ./so_long map.ber\n", 2);
+		ft_putstr_fd("Error\nUsage: ./so_long mapa.ber\n", 2);
 		return (1);
 	}
 	map = parse_map(argv[1]);
