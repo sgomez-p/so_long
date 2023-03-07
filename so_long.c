@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/07 10:09:45 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/07 19:55:56 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,35 @@
 
 int	read_map(char *file)
 {
-	int		fd;
-	char	*line;
+	int fd;
+	int ret;
+	char buf[1];
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		return (-1); // Error opening file
-	while ((line = get_next_line(fd)))
+		return (0);
+	while ((ret = read(fd, buf, 1)))
 	{
-		// Process the line
-		ft_putstr_fd(line, 1); // Example: print line to stdout
-		free(line);
+		if (buf[0] != '1' && buf[0] != '0' && buf[0] != 'P' && buf[0] != 'E' && buf[0] != 'C' && buf[0] != ' ' && buf[0] != ' ')
+			return (0);
 	}
-	if (line == NULL)
-	{
-		// Reached end of file or an error occurred
-		if (get_next_line(fd) == NULL)
-			return (0); // Successfully read the entire file
-		else
-			return (-1); // Error reading file
-	}
-	return (-1); // Should never reach here
+	close(fd);
+	return (1);
 }
-
 
 void	draw_map(t_map *map)
 {
+	draw_background(map);
+	draw_game_objects(map);
+}
+
+void	draw_background(t_map *map)
+{
 	int x;
 	int y;
+	void *img;
+
+	img = mlx_xpm_file_to_image(map->mlx, "./images/floor.xpm", &map->tile_width, &map->tile_height);
 
 	y = 0;
 	while (y < map->height)
@@ -50,16 +51,37 @@ void	draw_map(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			if (map->grid[y][x] == '1') // wall
-				mlx_put_image_to_window(map->mlx, map->win, map->wall_img, x * TILE_SIZE, y * TILE_SIZE);
-			else if (map->grid[y][x] == '0') // floor
-				mlx_put_image_to_window(map->mlx, map->win, map->floor_img, x * TILE_SIZE, y * TILE_SIZE);
-			else if (map->grid[y][x] == 'P') // player
-				mlx_put_image_to_window(map->mlx, map->win, map->player_img,
-					x * TILE_SIZE, y * TILE_SIZE);
-			else if (map->grid[y][x] == 'E') // exit
-				mlx_put_image_to_window(map->mlx, map->win, map->exit_img, x * TILE_SIZE, y * TILE_SIZE);
-			x++;	
+			mlx_put_image_to_window(map->mlx, map->win, img, x * map->tile_width, y * map->tile_height);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_game_objects(t_map *map)
+{
+	int x;
+	int y;
+	void *img;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			if (map->grid[y][x] == '1')
+				img = mlx_xpm_file_to_image(map->mlx, "./images/wall.xpm", &map->tile_width, &map->tile_height);
+			else if (map->grid[y][x] == 'P')
+				img = mlx_xpm_file_to_image(map->mlx, "./images/player.xpm", &map->tile_width, &map->tile_height);
+			else if (map->grid[y][x] == 'E')
+				img = mlx_xpm_file_to_image(map->mlx, "./images/exit.xpm", &map->tile_width, &map->tile_height);
+
+			else
+				img = NULL;
+			if (img)
+				mlx_put_image_to_window(map->mlx, map->win, img, x * map->tile_width, y * map->tile_height);
+			x++;
 		}
 		y++;
 	}
@@ -68,13 +90,10 @@ void	draw_map(t_map *map)
 int		run_game(t_map *map)
 {
 	map->mlx = mlx_init();
-	map->win = mlx_new_window(map->mlx, map->width * TILE_SIZE, map->height * TILE_SIZE, "so_long");
-	map->floor_img = mlx_xpm_file_to_image(map->mlx, "path/to/floor.xpm", &map->tile_width, &map->tile_height);
-	map->wall_img = mlx_xpm_file_to_image(map->mlx, "path/to/wall.xpm", &map->tile_width, &map->tile_height);
-	map->player_img = mlx_xpm_file_to_image(map->mlx, "path/to/player.xpm", &map->tile_width, &map->tile_height);
-	map->exit_img = mlx_xpm_file_to_image(map->mlx, "path/to/exit.xpm", &map->tile_width, &map->tile_height);
+	map->win = mlx_new_window(map->mlx, map->width * 64, map->height * 64, "so_long");
 
-	draw_map(map);
+	draw_background(map);
+	draw_game_objects(map);
 
 	mlx_loop(map->mlx);
 	return (0);
@@ -96,28 +115,39 @@ void	free_map(t_map *map)
 	free(map);
 }
 
-int	main(int argc, char **argv)
+
+int create_window(t_map *map)
 {
-	t_map	*map;
-	void	*mlx_ptr;
-	void	*win_ptr;
+    map->mlx = mlx_init();
+    map->win = mlx_new_window(map->mlx, map->width * 64, map->height * 64, "so_long");
+    if (!map->win)
+        return (0);
+    return (1);
+}
+
+int main(int argc, char **argv)
+{
+	t_map *map;
 
 	if (argc != 2)
 	{
-		ft_putstr_fd("Error\nUsage: ./so_long mapa.ber\n", 2);
+		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
 		return (1);
 	}
 	map = parse_map(argv[1]);
 	if (!map)
 	{
-		ft_putstr_fd("Error\nInvalid map\n", 2);
+		ft_putstr_fd("Error\nInvalid map file\n", 2);
 		return (1);
 	}
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, map->width * TILE_SIZE,
-			map->height * TILE_SIZE, "so_long");
+	if (!create_window(map))
+	{
+		ft_putstr_fd("Error\nFailed to create window\n", 2);
+		free_map(map);
+		return (1);
+	}
 	draw_map(map);
-	mlx_loop(mlx_ptr);
-	mlx_destroy_window(mlx_ptr, win_ptr);
+	mlx_loop(map->mlx);
+	free_map(map);
 	return (0);
 }

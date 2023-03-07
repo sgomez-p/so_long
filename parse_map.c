@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/06 19:10:29 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:36:04 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,20 @@
 #define ERROR "Error\n"
 #define VALID "Valid map\n"
 
-int is_uniform_map(char **map)
+int is_uniform_map(char **map, int rows, int cols)
 {
-    int line;
-    int map_len;
-    int start_count;
-    int goal_count;
-
-    line = 0;
-    map_len = 0;
-    start_count = 0;
-    goal_count = 0;
-    while (map[map_len])
-        map_len++;
-    while (map[line])
+    for (int i = 0; i < cols; i++)
     {
-        if (ft_strlen(map[line]) == 0)
+        if (map[0][i] != 'C' || map[rows - 1][i] != 'E')
             return (0);
-        if (line == 0 || line == map_len - 1)
-        {
-            if (ft_strchr(map[line], '1') == NULL ||
-                ft_strchr(map[line], '0') != NULL ||
-                ft_strchr(map[line], 'C') != NULL ||
-                ft_strchr(map[line], 'E') == NULL)
-                return (0);
-        }
-        else
-        {
-            if (ft_strchr(map[line], '1') == NULL ||
-                ft_strchr(map[line], '0') != NULL)
-                return (0);
-            if (ft_strchr(map[line], 'E') != NULL)
-                start_count++;
-            if (ft_strchr(map[line], 'C') != NULL)
-                goal_count++;
-        }
-        line++;
     }
-    if (start_count != 1 || goal_count == 0)
-        return (0);
+    for (int i = 1; i < rows - 1; i++)
+    {
+        if (map[i][0] != '0' || map[i][cols - 1] != '0')
+            return (0);
+    }
     return (1);
 }
-
-
-
 
 int is_rectangular_map(char **map)
 {
@@ -137,15 +107,16 @@ int has_valid_path(char **map, int rows, int cols, int i, int j)
 {
 	if (i < 0 || j < 0 || i >= rows || j >= cols)
 		return (0);
-	if (map[i][j] == '1' || map[i][j] == 'V')
+	if (map[i][j] == '1' || map[i][j] == '0')
 		return (0);
 	if (map[i][j] == 'E')
 		return (1);
-	map[i][j] = 'V';
+	map[i][j] = '0';
 	if (has_valid_path(map, rows, cols, i - 1, j) || has_valid_path(map, rows, cols, i, j - 1) || has_valid_path(map, rows, cols, i + 1, j) || has_valid_path(map, rows, cols, i, j + 1))
 		return (1);
 	return (0);
 }
+
 
 void	ft_free_str(char **str)
 {
@@ -234,8 +205,6 @@ int is_valid_path(char **map, int rows, int cols)
     // Comprobar si hay un camino válido desde la posición inicial hasta la final
     return is_valid_path_helper(map, rows, cols, start_row, start_col);
 }
-
-
 
 t_map	*parse_map(char *file_path)
 {

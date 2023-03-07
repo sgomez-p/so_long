@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/06 19:06:45 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:36:16 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "libft/libft.h"
-#include "mlx.h"
+#include "minilibx-linux/mlx.h"
 #include <X11/X.h>
 #include <X11/keysym.h>
 
@@ -46,5 +46,6 @@ int		run_game(t_map *map);
 void	draw_map(t_map *map);
 void	free_map(t_map *map);
 int is_valid_map(t_map *map);
+int is_uniform_map(char **map, int rows, int cols);
 
 #endif
