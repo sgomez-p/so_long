@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/07 12:36:04 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/08 14:42:09 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ int is_valid_map(t_map *map)
         j = 0;
         while (j < map->width)
         {
-			if (map->grid[i][j] != '1' && map->grid[i][j] != '0' && map->grid[i][j] != 'C' && map->grid[i][j] != 'E' && map->grid[i][j] != 'P')
+			if (map->map[i][j] != '1' && map->map[i][j] != '0' && map->map[i][j] != 'C' && map->map[i][j] != 'E' && map->map[i][j] != 'P')
 				return (0);
-            if (map->grid[i][j] == 'P')
+            if (map->map[i][j] == 'P')
                 start_count++;
-            if (map->grid[i][j] == 'E')
+            if (map->map[i][j] == 'E')
                 end_count++;
             j++;
         }
@@ -118,62 +118,36 @@ int has_valid_path(char **map, int rows, int cols, int i, int j)
 }
 
 
-void	ft_free_str(char **str)
-{
-	int	i;
-
-	if (!str)
-		return ;
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
-
-
 int is_valid_path_helper(char **map, int rows, int cols, int row, int col)
 {
-    // Comprobar si hemos llegado a la posición final 'C'
-    if (map[row][col] == 'C')
+    // Si la posición actual es un muro, devolver 0
+    if (map[row][col] == '1')
+        return 0;
+
+    // Si la posición actual es la salida, devolver 1
+    if (map[row][col] == 'E')
         return 1;
 
     // Marcar la posición actual como visitada
-    map[row][col] = 'V';
+    map[row][col] = '0';
 
-    // Comprobar si hay un camino válido hacia arriba
-    if (row > 0 && map[row - 1][col] != 'W' && map[row - 1][col] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row - 1, col))
-            return 1;
-    }
+    // Comprobar si hay un camino válido desde la posición actual hacia la derecha
+    if (col + 1 < cols && map[row][col + 1] != '1' && is_valid_path_helper(map, rows, cols, row, col + 1))
+        return 1;
 
-    // Comprobar si hay un camino válido hacia abajo
-    if (row < rows - 1 && map[row + 1][col] != 'W' && map[row + 1][col] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row + 1, col))
-            return 1;
-    }
+    // Comprobar si hay un camino válido desde la posición actual hacia abajo
+    if (row + 1 < rows && map[row + 1][col] != '1' && is_valid_path_helper(map, rows, cols, row + 1, col))
+        return 1;
 
-    // Comprobar si hay un camino válido hacia la izquierda
-    if (col > 0 && map[row][col - 1] != 'W' && map[row][col - 1] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row, col - 1))
-            return 1;
-    }
+    // Comprobar si hay un camino válido desde la posición actual hacia la izquierda
+    if (col - 1 >= 0 && map[row][col - 1] != '1' && is_valid_path_helper(map, rows, cols, row, col - 1))
+        return 1;
 
-    // Comprobar si hay un camino válido hacia la derecha
-    if (col < cols - 1 && map[row][col + 1] != 'W' && map[row][col + 1] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row, col + 1))
-            return 1;
-    }
+    // Comprobar si hay un camino válido desde la posición actual hacia arriba
+    if (row - 1 >= 0 && map[row - 1][col] != '1' && is_valid_path_helper(map, rows, cols, row - 1, col))
+        return 1;
 
-    // Si no hay camino válido desde la posición actual, marcar la posición como no visitada
-    map[row][col] = '.';
-
+    // Si no hay camino válido desde la posición actual, devolver 0
     return 0;
 }
 

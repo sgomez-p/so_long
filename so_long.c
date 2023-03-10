@@ -6,148 +6,126 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/07 19:55:56 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/10 13:19:21 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include <fcntl.h>
 
-int	read_map(char *file)
-{
-	int fd;
-	int ret;
-	char buf[1];
 
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-		return (0);
-	while ((ret = read(fd, buf, 1)))
-	{
-		if (buf[0] != '1' && buf[0] != '0' && buf[0] != 'P' && buf[0] != 'E' && buf[0] != 'C' && buf[0] != ' ' && buf[0] != ' ')
-			return (0);
-	}
-	close(fd);
-	return (1);
+
+void init_images(t_map *map)
+{
+    int width;
+    int height;
+
+    // Load obstacle images
+    map->obs1 = mlx_xpm_file_to_image(map->mlx, "obs1.xpm", &width, &height);
+    map->obs2 = mlx_xpm_file_to_image(map->mlx, "obs2.xpm", &width, &height);
+
+    // Load floor image
+    map->floor = mlx_xpm_file_to_image(map->mlx, "fondo2.xpm", &width, &height);
+
+    // Load collectable image
+    map->collectable = mlx_xpm_file_to_image(map->mlx, "collec1.xpm", &width, &height);
+
+    // Load character image
+    map->char = mlx_xpm_file_to_image(map->mlx, "char/front.xpm", &width, &height);
+
+    // Load exit image
+    map->exit = mlx_xpm_file_to_image(map->mlx, "exit.xpm", &width, &height);
 }
 
-void	draw_map(t_map *map)
+void print_obstacles_on_map(void *mlx, void *win, t_map *map)
 {
-	draw_background(map);
-	draw_game_objects(map);
+    void *img_ptr;
+    int i;
+    int j;
+    
+    i = 0;
+    j = 0;
+    while (i < map->height) 
+    {
+        j = 0;
+        while (j < map->width) 
+        {
+            if (map->map[i][j] == '1') 
+            {
+                img_ptr = map->obs;
+                mlx_put_image_to_window(mlx, win, img_ptr, j * 64, i * 64);
+            }
+            j++;
+        }
+        i++;
+    }
 }
 
-void	draw_background(t_map *map)
+void print_floor_on_map(void *mlx, void *win, t_map *map)
 {
-	int x;
-	int y;
-	void *img;
-
-	img = mlx_xpm_file_to_image(map->mlx, "./images/floor.xpm", &map->tile_width, &map->tile_height);
-
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			mlx_put_image_to_window(map->mlx, map->win, img, x * map->tile_width, y * map->tile_height);
-			x++;
-		}
-		y++;
-	}
+    mlx_put_image_to_window(mlx, win, map->floor, 0, 0);
 }
 
-void	draw_game_objects(t_map *map)
+void print_collectables_on_map(void *mlx, void *win, t_map *map)
 {
-	int x;
-	int y;
-	void *img;
-
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			if (map->grid[y][x] == '1')
-				img = mlx_xpm_file_to_image(map->mlx, "./images/wall.xpm", &map->tile_width, &map->tile_height);
-			else if (map->grid[y][x] == 'P')
-				img = mlx_xpm_file_to_image(map->mlx, "./images/player.xpm", &map->tile_width, &map->tile_height);
-			else if (map->grid[y][x] == 'E')
-				img = mlx_xpm_file_to_image(map->mlx, "./images/exit.xpm", &map->tile_width, &map->tile_height);
-
-			else
-				img = NULL;
-			if (img)
-				mlx_put_image_to_window(map->mlx, map->win, img, x * map->tile_width, y * map->tile_height);
-			x++;
-		}
-		y++;
-	}
+    mlx_put_image_to_window(mlx, win, map->collectable, 0, 0);
 }
 
-int		run_game(t_map *map)
+void print_char_on_map(void *mlx, void *win, t_map *map)
 {
-	map->mlx = mlx_init();
-	map->win = mlx_new_window(map->mlx, map->width * 64, map->height * 64, "so_long");
-
-	draw_background(map);
-	draw_game_objects(map);
-
-	mlx_loop(map->mlx);
-	return (0);
+    mlx_put_image_to_window(mlx, win, map->char, 0, 0);
 }
 
-void	free_map(t_map *map)
+void print_exit_on_map(void *mlx, void *win, t_map *map)
 {
-	t_list	*current;
-	t_list	*tmp;
+    mlx_put_image_to_window(mlx, win, map->exit, 0, 0);
+}
 
-	current = map->current;
-	while (current)
-	{
-		tmp = current;
-		current = current->next;
-		free(tmp->content);
-		free(tmp);
-	}
-	free(map);
+void free_map(t_map *map)
+{
+    int i;
+    for (i = 0; i < map->height; i++) {
+        free(map->map[i]);
+    }
+    free(map->map);
 }
 
 
-int create_window(t_map *map)
+i = 0;
+while (i < map->height * TILE_SIZE)
 {
-    map->mlx = mlx_init();
-    map->win = mlx_new_window(map->mlx, map->width * 64, map->height * 64, "so_long");
-    if (!map->win)
-        return (0);
-    return (1);
+    j = 0;
+    while (j < map->width * TILE_SIZE)
+    {
+        destroy_image(map->mlx, map->img[i / TILE_SIZE][j / TILE_SIZE]);
+        j += 64;
+    }
+    i += 64;
 }
+
+print_floor_on_map(map->mlx, map->win, map);
+print_collectables_on_map(map->mlx, map->win, map);
+print_obstacles_on_map(map->mlx, map->win, map);
+print_exit_on_map(map->mlx, map->win, map);
+print_char_on_map(map->mlx, map->win, map);
+
+mlx_hook(map->win, 2, 0, key_hook, map);
+mlx_hook(map->win, 17, 1L<<17, exit_hook, map);
+mlx_loop(map->mlx);
+
 
 int main(int argc, char **argv)
 {
-	t_map *map;
+    t_map *map;
 
-	if (argc != 2)
-	{
-		ft_putstr_fd("Error\nWrong number of arguments\n", 2);
-		return (1);
-	}
-	map = parse_map(argv[1]);
-	if (!map)
-	{
-		ft_putstr_fd("Error\nInvalid map file\n", 2);
-		return (1);
-	}
-	if (!create_window(map))
-	{
-		ft_putstr_fd("Error\nFailed to create window\n", 2);
-		free_map(map);
-		return (1);
-	}
-	draw_map(map);
-	mlx_loop(map->mlx);
-	free_map(map);
-	return (0);
+    if (argc != 2)
+        ft_error("Error\nNúmero inválido de argumentos");
+    //Lee el archivo de mapa y valida su contenido
+    if (!read_map(argv[1], &map))
+        ft_error("Error\nMapa inválido");
+    //Inicia la ventana del juego
+    init_window(&map);
+    //Libera la memoria asignada al mapa
+    free_map(&map);
+    return (0);
 }
