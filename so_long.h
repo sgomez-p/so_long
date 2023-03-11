@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/10 11:06:01 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/11 10:11:02 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,23 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 
-# define TILE_SIZE 32
+#define TILE_SIZE 64
 
 
 typedef struct	t_map
 {
 	int width;
 	int height;
+	int screen_width;
+	int screen_height;
 	char **map;
 	void *mlx;
 	void *win;
-	int tile_width;
-	int tile_height;
+	void	*obs;
+	void	*floor;
+	void	*col;
+	void	*player;
+	void	*exit;
 	int player_x;
 	int player_y;
 	int exit_x;
