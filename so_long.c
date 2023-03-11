@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/11 11:30:39 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/11 11:59:18 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	print_floor_on_map(void *mlx, void *win, t_map *map)
 	}
 }
 
-void	print_collectables_on_map(void *mlx, void *win, t_map *map)
+void	print_col_on_map(void *mlx, void *win, t_map *map)
 {
 	int		x;
 	int		y;
@@ -134,32 +134,30 @@ void	print_player_on_map(void *mlx, void *win, t_map *map)
 	}
 }
 
-int	key_hook(int keycode, t_map *map)
-{
-	if (keycode == KEY_W)
-		move_up(map);
-	else if (keycode == KEY_S)
-		move_down(map);
-	else if (keycode == KEY_A)
-		move_left(map);
-	else if (keycode == KEY_D)
-		move_right(map);
-	if (is_game_over(map))
-		exit_hook(map);
-	return (0);
-}
+// int	key_hook(int keycode, t_map *map)
+// {
+// 	if (keycode == KEY_W)
+// 		move_up(map);
+// 	else if (keycode == KEY_S)
+// 		move_down(map);
+// 	else if (keycode == KEY_A)
+// 		move_left(map);
+// 	else if (keycode == KEY_D)
+// 		move_right(map);
+// 	if (is_game_over(map))
+// 		exit_hook(map);
+// 	return (0);
+// }
 
-int	exit_hook(t_map *map)
-{
-	free_map(map);
-	exit(0);
-}
+// int	exit_hook(t_map *map)
+// {
+// 	free_map(map);
+// 	exit(0);
+// }
 
 
 void	init_window(t_map *map)
 {
-	int		screen_width;
-	int		screen_height;
 
 	// Inicia la conexión con el servidor X11
 	map->mlx = mlx_init();
@@ -167,8 +165,7 @@ void	init_window(t_map *map)
 		ft_putstr_fd("Error\nNo se pudo iniciar la ventana", 1);
 
 	// Obtiene las dimensiones de la pantalla
-	screen_width = mlx_get_screen_size(map->mlx, 0);
-	screen_height = mlx_get_screen_size(map->mlx, 0);
+
 
 	// Calcula las dimensiones de la ventana y la centra en la pantalla
 	map->width *= TILE_SIZE;
@@ -181,14 +178,14 @@ void	init_window(t_map *map)
 
 	// Dibuja el mapa
 	print_floor_on_map(map->mlx, map->win, map);
-	print_cols_on_map(map->mlx, map->win, map);
+	print_col_on_map(map->mlx, map->win, map);
 	print_obstacles_on_map(map->mlx, map->win, map);
 	print_exit_on_map(map->mlx, map->win, map);
 	print_player_on_map(map->mlx, map->win, map);
 
 	// Establece los hooks para el teclado y la salida del programa
-	mlx_hook(map->win, 2, 0, key_hook, map);
-	mlx_hook(map->win, 17, 1L<<17, exit_hook, map);
+	// mlx_hook(map->win, 2, 0, key_hook, map);
+	// mlx_hook(map->win, 17, 1L<<17, exit_hook, map);
 
 	// Inicia el bucle principal de eventos
 	mlx_loop(map->mlx);
@@ -204,8 +201,6 @@ void free_map(t_map *map)
         i++;
     }
     free(map->map);
-
-    ft_lstclear(&map->current, free_col);
 
    mlx_destroy_image(map->mlx, map->obs);
    mlx_destroy_image(map->mlx, map->floor);
