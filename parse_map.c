@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/08 14:42:09 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/12 10:00:10 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,28 @@ int is_uniform_map(char **map, int rows, int cols)
     }
     return (1);
 }
+#include <string.h>
 
 int is_rectangular_map(char **map)
 {
-	int i;
-	int cols;
-	int rows;
-	i = 1;
-	cols = ft_strlen(map[0]);
-	rows = 0;
-	while (map[rows])
-		rows++;
-	while (i < rows)
-	{
-		if ((int)ft_strlen(map[i]) != cols)
-			return (0);
-		i++;
-	}
-	return (1);
+    int i = 0;
+    int cols = strlen(map[0]);
+    int rows = 0;
+
+    if (map[0] == NULL)
+        return (0);
+
+    while (map[rows])
+        rows++;
+
+    while (i < rows)
+    {
+        if ((int)strlen(map[i]) != cols)
+            return (0);
+        i++;
+    }
+
+    return (1);
 }
 
 int is_valid_map(t_map *map)
