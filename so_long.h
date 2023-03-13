@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/11 10:11:02 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/13 11:50:06 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct	t_map
 	int height;
 	int screen_width;
 	int screen_height;
+	void *img;
 	char **map;
 	void *mlx;
 	void *win;
@@ -38,6 +39,9 @@ typedef struct	t_map
 	void	*col;
 	void	*player;
 	void	*exit;
+	void	*wall;
+	int y;
+	int x;
 	int player_x;
 	int player_y;
 	int exit_x;
@@ -46,11 +50,9 @@ typedef struct	t_map
 	t_list *current;
 } 				t_map;
 
-int		read_map(char *file);
-t_map	*parse_map(char *file_path);
-int		run_game(t_map *map);
-void	free_map(t_map *map);
-int is_valid_map(t_map *map);
-int is_uniform_map(char **map, int rows, int cols);
+
+void all_checks(t_map *map);
+int map_height(t_map *map);
+void check_ext(char *map);
 
 #endif
