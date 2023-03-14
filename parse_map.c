@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 14:40:05 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:09:21 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void	fl(char *line)
     while (line[++i] != '\0' && line[i] != '\r' && line[i] != '\n')
     {
         if (line[i] != '1')
-            ft_putstr_fd("ERROR\n", 1);
+            {
+                ft_putstr_fd("ERROR\n", 1);
+                exit(1);
+            }
     }
 }
 
@@ -51,7 +54,10 @@ void is_valid_walls(t_map **map)
     while(i < aux)
     {
         if ((*map)->map[i][0] != '1' || (*map)->map[i][ft_strlen((*map)->map[i]) - 1] != '1')
-            ft_putstr_fd("No estan bien las paredes\n", 1);
+        {
+            ft_putstr_fd("No estan bien las paredes\n", 1);         
+            exit(1);
+        }
         i++;
     }
     fl((*map)->map[aux]);
@@ -67,7 +73,10 @@ void is_valid_chars(t_map **map)
         while ((*map)->map[y][x] != '\0' && (*map)->map[y][x] != '\r')
         {
             if ((*map)->map[y][x] != '0' && (*map)->map[y][x] != '1' && (*map)->map[y][x] != 'C' && (*map)->map[y][x] != 'E' && (*map)->map[y][x] != 'P')
+            {
                 ft_putstr_fd("ERROR\n", 1);
+                exit(1);
+            }
             x++;
         }
         y++;
@@ -98,15 +107,21 @@ void is_valid_pec(t_map **map)
         y++;
     }
     if (let[0] != 1 || let[1] != 1 || let[2] != 1)
+    {
         ft_putstr_fd("ERROR\n", 1);
+        exit(1);
+    }
 }
 
 void is_valid_ext(char *map)
 {
     int len = ft_strlen(map);
 
-    if(map[len - 4] != '.' && map[len - 4] != 'b' && map[len - 4] != 'e' && map[len - 4] != 'r')
+    if(map[len - 4] != '.' && map[len - 4] != 'b' && map[len - 4] != 'e' && map[len - 4] != 'r')  
+    {
         ft_putstr_fd("Anda pon una imagen que sea .ber\n", 1);
+        exit(1);
+    }
 }
 
 void all_clean(t_map *map)
