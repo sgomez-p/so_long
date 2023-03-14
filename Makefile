@@ -6,14 +6,13 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/07 11:29:02 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/14 13:39:35 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
 NAME		=	so_long
 CC			=	gcc
-SRCS		=	so_long.c parse_map.c libft/get_next_line.c libft/get_next_line_utils.c
+SRCS		=	so_long.c parse_map.c
 
 LIBFT		=	libft/libft.a
 CFLAGS		=	-Wall -Wextra -Werror
@@ -22,7 +21,7 @@ RM			=	rm -f
 OBJS		=	$(SRCS:%.c=%.o)
 
 ifeq ($(shell uname), Linux)
-MLXFLAGS	=	-L ./minilibx_linux/ -lmlx -Ilmlx -lXext -lX11 -lbsd
+MLXFLAGS	=	-L ./mlx_linux/ -lmlx -Ilmlx -lXext -lX11 -lbsd
 endif
 
 
@@ -35,13 +34,6 @@ $(NAME):	$(OBJS)
 
 %o:			%.c
 			$(CC) $(CFLAGS) -Imlx -c $< -o $@
-
-git: fclean
-	@echo "\t${BIPurple}>>Push To Git<<${NoColor}"
-	@git add . ;
-	@read -p "Name the commit: " commit ;\
-	git commit -m "$$commit" ;\
-	git push;
 
 clean:
 			$(RM) $(OBJS)
@@ -61,51 +53,3 @@ git:
 # To call: make git m="my commit"
 
 .PHONY:		all clean fclean re
-
-
-
-
-# # MAC
-# NAME		= so_long
-# SRCS		= main.c \
-# 			  so_long.c \
-# 			  parse_map.c \
-# 			  gnl/get_next_line.c \
-# 			  gnl/get_next_line_utils.c
-
-# OBJS		= ${SRCS:.c=.o}
-
-# CC			= gcc
-# CFLAGS		= -Wall -Wextra -Werror -I./libft -I./gnl -I/usr/local/include -g
-# LDFLAGS		= -L/usr/local/lib -lmlx -framework OpenGL -framework AppKit
-# RM			= rm -f
-
-# LIBFT_DIR	= ./libft
-# LIBFT		= libft.a
-# LIBFT_LIB	= $(addprefix $(LIBFT_DIR)/, $(LIBFT))
-
-# all:		$(NAME)
-
-# $(NAME):	$(OBJS)
-# 			$(MAKE) -C $(LIBFT_DIR)
-# 			$(CC) $(CFLAGS) $(LDFLAGS) -L$(LIBFT_DIR) -lft -o $(NAME) $(OBJS)
-
-# git: fclean
-# 	@echo "\t${BIPurple}>>Push To Git<<${NoColor}"
-# 	@git remote -v | cut -d " " -f 1 | uniq
-# 	@git add . ;
-# 	@read -p "Name the commit: " commit ;\
-# 	git commit -m "$$commit" ;\
-# 	read -p "Check the files..." -t 20;
-# 	@git push ;
-# clean:
-# 			$(MAKE) clean -C $(LIBFT_DIR)
-# 			$(RM) $(OBJS)
-
-# fclean:		clean
-# 			$(MAKE) fclean -C $(LIBFT_DIR)
-# 			$(RM) $(NAME)
-
-# re:			fclean all
-
-# .PHONY:		all clean fclean re

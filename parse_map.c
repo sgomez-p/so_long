@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/07 12:36:04 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:40:05 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,227 +16,103 @@
 #include <unistd.h>
 #include "libft/libft.h"
 
-#define ERROR "Error\n"
-#define VALID "Valid map\n"
-
-int is_uniform_map(char **map, int rows, int cols)
-{
-    for (int i = 0; i < cols; i++)
-    {
-        if (map[0][i] != 'C' || map[rows - 1][i] != 'E')
-            return (0);
-    }
-    for (int i = 1; i < rows - 1; i++)
-    {
-        if (map[i][0] != '0' || map[i][cols - 1] != '0')
-            return (0);
-    }
-    return (1);
-}
-
-int is_rectangular_map(char **map)
-{
-	int i;
-	int cols;
-	int rows;
-	i = 1;
-	cols = ft_strlen(map[0]);
-	rows = 0;
-	while (map[rows])
-		rows++;
-	while (i < rows)
-	{
-		if ((int)ft_strlen(map[i]) != cols)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int is_valid_map(t_map *map)
-{
-    int i;
-    int j;
-    int start_count;
-    int end_count;
-
-    i = 0;
-    start_count = 0;
-    end_count = 0;
-    while (i < map->height)
-    {
-        j = 0;
-        while (j < map->width)
-        {
-			if (map->grid[i][j] != '1' && map->grid[i][j] != '0' && map->grid[i][j] != 'C' && map->grid[i][j] != 'E' && map->grid[i][j] != 'P')
-				return (0);
-            if (map->grid[i][j] == 'P')
-                start_count++;
-            if (map->grid[i][j] == 'E')
-                end_count++;
-            j++;
-        }
-        i++;
-    }
-    if (start_count != 1 || end_count != 1)
-        return (0);
-    return (1);
-}
-
-int is_closed_map(char **map, int rows, int cols)
-{
-	int i = 0;
-
-	while (i < cols) // checkeamos filas(row)
-	{
-		if (map[0][i] != '1' || map[rows - 1][i] != '1')
-			return (0);
-		i++;
-	}
-	i = 0;
-	while (i < rows) // checkeamos columnas
-	{
-		if (map[i][0] != '1' || map[i][cols - 1] != '1')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int has_valid_path(char **map, int rows, int cols, int i, int j)
-{
-	if (i < 0 || j < 0 || i >= rows || j >= cols)
-		return (0);
-	if (map[i][j] == '1' || map[i][j] == '0')
-		return (0);
-	if (map[i][j] == 'E')
-		return (1);
-	map[i][j] = '0';
-	if (has_valid_path(map, rows, cols, i - 1, j) || has_valid_path(map, rows, cols, i, j - 1) || has_valid_path(map, rows, cols, i + 1, j) || has_valid_path(map, rows, cols, i, j + 1))
-		return (1);
-	return (0);
-}
-
-
-void	ft_free_str(char **str)
+void	fl(char *line)
 {
 	int	i;
 
-	if (!str)
-		return ;
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
+	i = -1;
+    while (line[++i] != '\0' && line[i] != '\r' && line[i] != '\n')
+    {
+        if (line[i] != '1')
+            ft_putstr_fd("ERROR\n", 1);
+    }
 }
 
-
-int is_valid_path_helper(char **map, int rows, int cols, int row, int col)
+void is_valid_rect(t_map **map)
 {
-    // Comprobar si hemos llegado a la posición final 'C'
-    if (map[row][col] == 'C')
-        return 1;
+    int aux = 1, idx, len = 1;
 
-    // Marcar la posición actual como visitada
-    map[row][col] = 'V';
-
-    // Comprobar si hay un camino válido hacia arriba
-    if (row > 0 && map[row - 1][col] != 'W' && map[row - 1][col] != 'V')
+    if((*map)->y >= (*map)->x)
+        ft_putstr_fd("El mapa no es rectangular\n", 1);
+    while(aux++ < (*map)->y && len < (*map)->y)
     {
-        if (is_valid_path_helper(map, rows, cols, row - 1, col))
-            return 1;
+        idx = ft_strlen((*map)->map[len]);
+        if(len == (*map)->y - 1)
+            idx = ft_strlen((*map)->map[len]);
+        len++;
     }
-
-    // Comprobar si hay un camino válido hacia abajo
-    if (row < rows - 1 && map[row + 1][col] != 'W' && map[row + 1][col] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row + 1, col))
-            return 1;
-    }
-
-    // Comprobar si hay un camino válido hacia la izquierda
-    if (col > 0 && map[row][col - 1] != 'W' && map[row][col - 1] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row, col - 1))
-            return 1;
-    }
-
-    // Comprobar si hay un camino válido hacia la derecha
-    if (col < cols - 1 && map[row][col + 1] != 'W' && map[row][col + 1] != 'V')
-    {
-        if (is_valid_path_helper(map, rows, cols, row, col + 1))
-            return 1;
-    }
-
-    // Si no hay camino válido desde la posición actual, marcar la posición como no visitada
-    map[row][col] = '.';
-
-    return 0;
 }
 
-int is_valid_path(char **map, int rows, int cols)
+void is_valid_walls(t_map **map)
 {
-    int i, j;
-    int start_row = -1, start_col = -1;
+    int i = 1, aux = (*map)->y - 1;
 
-    // Encontrar la posición inicial 'P'
-    for (i = 0; i < rows; i++)
+    fl((*map)->map[0]);
+    while(i < aux)
     {
-        for (j = 0; j < cols; j++)
+        if ((*map)->map[i][0] != '1' || (*map)->map[i][ft_strlen((*map)->map[i]) - 1] != '1')
+            ft_putstr_fd("No estan bien las paredes\n", 1);
+        i++;
+    }
+    fl((*map)->map[aux]);
+}
+
+void is_valid_chars(t_map **map)
+{
+    int y = 0, x;
+
+    while (y < (*map)->y)
+    {
+        x = 0;
+        while ((*map)->map[y][x] != '\0' && (*map)->map[y][x] != '\r')
         {
-            if (map[i][j] == 'P')
-            {
-                start_row = i;
-                start_col = j;
-                break;
-            }
+            if ((*map)->map[y][x] != '0' && (*map)->map[y][x] != '1' && (*map)->map[y][x] != 'C' && (*map)->map[y][x] != 'E' && (*map)->map[y][x] != 'P')
+                ft_putstr_fd("ERROR\n", 1);
+            x++;
         }
-        if (start_row != -1 && start_col != -1)
-            break;
+        y++;
     }
-
-    // Si no hay posición inicial 'P' en el mapa, devolver 0
-    if (start_row == -1 || start_col == -1)
-        return 0;
-
-    // Comprobar si hay un camino válido desde la posición inicial hasta la final
-    return is_valid_path_helper(map, rows, cols, start_row, start_col);
 }
 
-t_map	*parse_map(char *file_path)
+void is_valid_pec(t_map **map)
 {
-	int		fd;
-	char	*line;
-	t_map	*map;
+    int y = 0, x, let[3] = {0};
 
-	fd = open(file_path, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
-	map = (t_map *)malloc(sizeof(t_map));
-	if (!map)
-		return (NULL);
-	map->height = 0;
-	map->width = 0;
-	map->current = NULL;
-	line = NULL;
-	while (get_next_line(fd))
-	{
-		line = get_next_line(fd);
-		ft_lstadd_back(&(map->current), ft_lstnew(line));
-		map->height++;
-	}
-	if (line)
-	{
-		ft_lstadd_back(&(map->current), ft_lstnew(line));
-		map->height++;
-	}
-	close(fd);
-	if (map->height > 0)
-		map->width = ft_strlen(ft_lstlast(map->current)->content);
-	else
-		map->width = 0;
-	return (map);
+    while (y < (*map)->y)
+    {
+        x = 0;
+        while ((*map)->map[y][x] != '\0' && (*map)->map[y][x] != '\r')
+        {
+            if ((*map)->map[y][x] == 'P')
+            {
+                (*map)->player_x = y;
+                (*map)->player_y = x;
+                let[0] = 1;
+            }
+            if ((*map)->map[y][x] == 'E')
+                let[1] = 1;
+            if ((*map)->map[y][x] == 'C')
+                let[2] = 1;
+            x++;
+        }
+        y++;
+    }
+    if (let[0] != 1 || let[1] != 1 || let[2] != 1)
+        ft_putstr_fd("ERROR\n", 1);
+}
+
+void is_valid_ext(char *map)
+{
+    int len = ft_strlen(map);
+
+    if(map[len - 4] != '.' && map[len - 4] != 'b' && map[len - 4] != 'e' && map[len - 4] != 'r')
+        ft_putstr_fd("Anda pon una imagen que sea .ber\n", 1);
+}
+
+void all_clean(t_map *map)
+{
+    is_valid_rect(&map);
+    is_valid_walls(&map);
+    is_valid_chars(&map);
+    is_valid_pec(&map);
 }
