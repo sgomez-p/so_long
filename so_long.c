@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 15:16:44 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:23:02 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,13 @@ void	where_is_pe(t_map *map)
 		{
 			if (map->map[fil][col] == 'P')
 			{
-				map->col_jp = col;
-				map->fil_jp = fil;
+				map->col_actual = col;
+				map->fil_actual = fil;
 			}
 			else if (map->map[fil][col] == 'E')
 			{
-				map->col_fin = col;
-				map->fil_fin = fil;
+				map->col_end = col;
+				map->fil_end = fil;
 			}
 		}
 	}
@@ -377,48 +377,48 @@ void render_all(t_map *map)
 
 static void move_left(t_map *map)
 {
-    if(is_valid_move(map->fil_jp, map->col_jp - 1, map))
+    if(is_valid_move(map->fil_actual, map->col_actual - 1, map))
     {
-        add_points(map->fil_jp, map->col_jp - 1, map);
-        map->map[map->fil_jp][map->col_jp] = '0';
-        map->col_jp--;
-        map->map[map->fil_jp][map->col_jp] = 'P';
+        add_points(map->fil_actual, map->col_actual - 1, map);
+        map->map[map->fil_actual][map->col_actual] = '0';
+        map->col_actual--;
+        map->map[map->fil_actual][map->col_actual] = 'P';
         map->moves = map->moves + 1;
     }
 }
 
 static void move_up(t_map *map)
 {
-    if(is_valid_move(map->fil_jp - 1, map->col_jp, map))
+    if(is_valid_move(map->fil_actual - 1, map->col_actual, map))
     {
-        add_points(map->fil_jp - 1, map->col_jp, map);
-        map->map[map->fil_jp][map->col_jp] = '0';
-        map->fil_jp--;
-        map->map[map->fil_jp][map->col_jp] = 'P';
+        add_points(map->fil_actual - 1, map->col_actual, map);
+        map->map[map->fil_actual][map->col_actual] = '0';
+        map->fil_actual--;
+        map->map[map->fil_actual][map->col_actual] = 'P';
         map->moves = map->moves + 1;
     }
 }
 
 static void move_right(t_map *map)
 {
-    if(is_valid_move(map->fil_jp, map->col_jp + 1, map))
+    if(is_valid_move(map->fil_actual, map->col_actual + 1, map))
     {
-        add_points(map->fil_jp, map->col_jp + 1, map);
-        map->map[map->fil_jp][map->col_jp] = '0';
-        map->col_jp++;
-        map->map[map->fil_jp][map->col_jp] = 'P';
+        add_points(map->fil_actual, map->col_actual + 1, map);
+        map->map[map->fil_actual][map->col_actual] = '0';
+        map->col_actual++;
+        map->map[map->fil_actual][map->col_actual] = 'P';
         map->moves = map->moves + 1;
     }
 }
 
 static void move_down(t_map *map)
 {
-    if(is_valid_move(map->fil_jp + 1, map->col_jp, map))
+    if(is_valid_move(map->fil_actual + 1, map->col_actual, map))
     {
-        add_points(map->fil_jp + 1, map->col_jp, map);
-        map->map[map->fil_jp][map->col_jp] = '0';
-        map->fil_jp++;
-        map->map[map->fil_jp][map->col_jp] = 'P';
+        add_points(map->fil_actual + 1, map->col_actual, map);
+        map->map[map->fil_actual][map->col_actual] = '0';
+        map->fil_actual++;
+        map->map[map->fil_actual][map->col_actual] = 'P';
         map->moves = map->moves + 1;
     }
 }
@@ -495,14 +495,11 @@ int main(int argc, char **argv)
     (void)argv;
     (void)argc;
     
-    //chk_ext(argv[1]);
     map.map = read_map(argv[1]);
     init_vars(&map);
     where_is_pe(&map);
     all_clean(&map);
     init_points(&map);
-
     init_window(&map);
-    
-
+    free(&map);
 }

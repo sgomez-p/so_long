@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 14:40:41 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:22:53 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ typedef struct	t_map
     char **map;
     int x;
     int y;
-    int col_jp;
-    int fil_jp;
-    int col_fin;
-    int fil_fin;
+    int col_actual;
+    int fil_actual;
+    int col_end;
+    int fil_end;
     int total_points;
     int collected_points;
     int moves;
