@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 15:12:56 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:16:44 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,7 +384,6 @@ static void move_left(t_map *map)
         map->col_jp--;
         map->map[map->fil_jp][map->col_jp] = 'P';
         map->moves = map->moves + 1;
-        // print_map(map);
     }
 }
 
@@ -397,7 +396,6 @@ static void move_up(t_map *map)
         map->fil_jp--;
         map->map[map->fil_jp][map->col_jp] = 'P';
         map->moves = map->moves + 1;
-        // print_map(map);
     }
 }
 
@@ -410,7 +408,6 @@ static void move_right(t_map *map)
         map->col_jp++;
         map->map[map->fil_jp][map->col_jp] = 'P';
         map->moves = map->moves + 1;
-        // print_map(map);
     }
 }
 
@@ -423,7 +420,6 @@ static void move_down(t_map *map)
         map->fil_jp++;
         map->map[map->fil_jp][map->col_jp] = 'P';
         map->moves = map->moves + 1;
-        // print_map(map);
     }
 }
 
