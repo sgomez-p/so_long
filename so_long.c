@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 15:23:02 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:27:41 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,24 +121,24 @@ char **read_map(char *fmap)
 
 void	where_is_pe(t_map *map)
 {
-	int	col;
-	int	fil;
+	int	j;
+	int	i;
 
-	fil = -1;
-	while (map->y > ++fil)
+	i = -1;
+	while (map->y > ++i)
 	{
-		col = -1;
-		while (map->map[fil][++col])
+		j = -1;
+		while (map->map[i][++j])
 		{
-			if (map->map[fil][col] == 'P')
+			if (map->map[i][j] == 'P')
 			{
-				map->col_actual = col;
-				map->fil_actual = fil;
+				map->col_actual = j;
+				map->fil_actual = i;
 			}
-			else if (map->map[fil][col] == 'E')
+			else if (map->map[i][j] == 'E')
 			{
-				map->col_end = col;
-				map->fil_end = fil;
+				map->col_end = j;
+				map->fil_end = i;
 			}
 		}
 	}
@@ -325,8 +325,8 @@ void init_points(t_map *map)
     int i;
     int j;
     
-    i = 0;
-    j = 0;
+    i = 0; // fila
+    j = 0; //coumnas
     while (i < map->y) 
     {
         j = 0;
