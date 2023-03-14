@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 14:46:11 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:56:17 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -510,7 +510,6 @@ int main(int argc, char **argv)
     init_vars(&map);
     where_is_pe(&map);
     all_clean(&map);
-    //find_path(&map);
     init_points(&map);
     //movidas minilibx
     init_window(&map);
