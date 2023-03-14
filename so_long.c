@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 14:56:17 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:12:56 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -485,14 +485,8 @@ void init_window(t_map *map)
     print_collectables_on_map(map->mlx_ptr, map->win_ptr, map);
     print_exit_on_map(map->mlx_ptr, map->win_ptr, map);
 
-    // mlx_hook(win_ptr, 2, 1L<<0, move_character_up, map);
     mlx_key_hook(map->win_ptr, move_character_up, map);
-    
-
-    //Muestra la imagen en la ventana
-    //Mostrar la ventana
     mlx_loop(map->mlx_ptr);
-        //movidas minilibx
 }
 
 
@@ -511,7 +505,7 @@ int main(int argc, char **argv)
     where_is_pe(&map);
     all_clean(&map);
     init_points(&map);
-    //movidas minilibx
+
     init_window(&map);
     
 
