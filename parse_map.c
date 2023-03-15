@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 15:09:21 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/15 17:51:18 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	fl(char *line)
 
 void is_valid_rect(t_map **map)
 {
-    int aux = 1, idx, len = 1;
+    int aux = 1, idx = 1, len = 1;
 
     if((*map)->y >= (*map)->x)
         ft_putstr_fd("El mapa no es rectangular\n", 1);
@@ -41,7 +41,7 @@ void is_valid_rect(t_map **map)
     {
         idx = ft_strlen((*map)->map[len]);
         if(len == (*map)->y - 1)
-            idx = ft_strlen((*map)->map[len]);
+            (void)idx;
         len++;
     }
 }
@@ -118,10 +118,7 @@ void is_valid_ext(char *map)
     int len = ft_strlen(map);
 
     if(map[len - 4] != '.' && map[len - 4] != 'b' && map[len - 4] != 'e' && map[len - 4] != 'r')  
-    {
-        ft_putstr_fd("Anda pon una imagen que sea .ber\n", 1);
-        exit(1);
-    }
+        error(9);
 }
 
 void all_clean(t_map *map)
@@ -130,4 +127,75 @@ void all_clean(t_map *map)
     is_valid_walls(&map);
     is_valid_chars(&map);
     is_valid_pec(&map);
+}
+
+
+
+void print_error_2(int n)
+{
+	if (n == 6)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mNo walls on sides\n\033[0m");
+        exit(1);
+    }
+    else if (n == 7)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mNo walls at the bottom\n\033[0m");
+        exit(1);
+    }
+    else if (n == 8)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mInvalid map components\n\033[0m");
+        exit(1);
+    }
+    else if (n == 9)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mNo .ber extension\n\033[0m");
+        exit(1);
+    }
+    else if (n == 10)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mNo posible path\n\033[0m");
+        exit(1);
+    }
+}
+
+void print_error(int n)
+{
+    if (n == 1)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;31mNo input file\n\033[0m");
+        exit(1);
+    }
+    else if (n == 2)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;31mTry less arguments\n\033[0m");
+        exit(1);
+    }
+    else if (n == 3)
+    {
+        perror("\033[1;31mERROR:\033[0m");
+        exit(1);
+    }
+    else if (n == 4)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mMap isnt rectangular\n\033[0m");
+        exit(1);
+    }
+    else if (n == 5)
+    {
+        ft_printf("\033[0;31mError\n\033[0m");
+        ft_printf("\033[0;33mMap hasnt wall on top\n\033[0m");
+        exit(1);
+    }
+   else
+   print_error_2(n);
 }

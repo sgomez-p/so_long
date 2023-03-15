@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/14 15:22:53 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/15 17:58:24 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "libft/libft.h"
 # include <fcntl.h>
 #include <mlx.h>
+#include "minilibx-linux/mlx.h"
 
 #define TILE_SIZE 64
 
@@ -38,16 +39,18 @@ typedef struct	t_map
     int fil_end;
     int total_points;
     int collected_points;
-    int moves;
+    int move_cont;
     int my_exit;
-    void *win_ptr;
-    void *mlx_ptr;
-	int *img_ptr;
+    void *win;
+    void *mlx;
+	int *img;
 	int player_y;
 	int player_x;
 } 				t_map;
 
 
 void all_clean(t_map *map);
+void print_error_2(int n);
+void print_error(int n);
 
 #endif
