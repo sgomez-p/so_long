@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/15 19:02:32 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/15 20:45:34 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char **read_map(char *fmap)
 	char	*joined_lines;
 
 	line = "";
-	joined_lines = ft_strdup("");
+	joined_lines = ft_calloc(1, sizeof(char));
 	fd = open(fmap, O_RDONLY);
 	if (fd < 0)
 		print_error(3);
@@ -70,7 +70,6 @@ void	where_is_pe(t_map *map)
 			}
 		}
 	}
-	return ;
 }
 
 int map_height(char **map)
@@ -113,13 +112,13 @@ void print_obstacles_on_map(void *mlx, void *win, t_map *map)
             {
                 if((i + j) % 2 == 0)
                 {
-                    img = mlx_xpm_file_to_image(mlx, "image/obs.xpm", &width, &height);
+                    img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
                     mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                     mlx_destroy_image(mlx, img);
                 }
                 if((i + j) % 2 == 1)
                 {
-                    img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
+                    img = mlx_xpm_file_to_image(mlx, "image/playerup.xpm", &width, &height);
                     mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                     mlx_destroy_image(mlx, img);
                 }
@@ -184,7 +183,7 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map)
     }
 }
 
-void print_char_on_map(void *mlx, void *win, t_map *map)
+void print_player_on_map(void *mlx, void *win, t_map *map)
 {
     void *img;
     int width;
@@ -276,7 +275,6 @@ void add_points(int fil, int col, t_map *map)
     if (map->map[fil][col] == 'C')
     {
         map->collected_points = map->collected_points + 1;
-        //printf("%d\n", map->collected_points);
     }
     if(map->collected_points == map->total_points)
     {
@@ -301,7 +299,7 @@ void render_all(t_map *map)
 {
     print_floor_on_map(map->mlx, map->win, map);
     print_obstacles_on_map(map->mlx, map->win, map);
-    print_char_on_map(map->mlx, map->win, map);
+    print_player_on_map(map->mlx, map->win, map);
     print_exit_on_map(map->mlx, map->win, map);
 }
 
@@ -353,7 +351,7 @@ static void move_down(t_map *map)
     }
 }
 
-int move_character_up(int keycode, t_map *map)
+int move_the_player(int keycode, t_map *map)
 {
     if (keycode == 0 || keycode == 123)
     {
@@ -386,12 +384,11 @@ void init_window(t_map *map)
     int height;
     int i;
     int j;
-    
-    //Inicializa la conexión con el servidor gráfico
+
     map->mlx = mlx_init();
-    //Crea una ventana de 500 x 500 píxeles
+
     map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 64 + 2), "juego");
-    //Carga la imagen desde el archivo XPM
+
     i = 0;
     j = 0;
     while(j < (map->y * 64 + 2))
@@ -407,11 +404,11 @@ void init_window(t_map *map)
         j = j + 64;
     }
     print_obstacles_on_map(map->mlx, map->win, map);
-    print_char_on_map(map->mlx, map->win, map);
+    print_player_on_map(map->mlx, map->win, map);
     print_collectables_on_map(map->mlx, map->win, map);
     print_exit_on_map(map->mlx, map->win, map);
 
-    mlx_key_hook(map->win, move_character_up, map);
+    mlx_key_hook(map->win, move_the_player, map);
     mlx_loop(map->mlx);
 }
 
@@ -429,5 +426,4 @@ int main(int argc, char **argv)
     all_clean(&map);
     init_points(&map);
     init_window(&map);
-  //  free(&map);
 }
