@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/15 17:59:04 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:02:32 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void print_obstacles_on_map(void *mlx, void *win, t_map *map)
             {
                 if((i + j) % 2 == 0)
                 {
-                    img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
+                    img = mlx_xpm_file_to_image(mlx, "image/obs.xpm", &width, &height);
                     mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                     mlx_destroy_image(mlx, img);
                 }
@@ -174,7 +174,7 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map)
         {
             if (map->map[i][j] == 'C') 
             {
-                img = mlx_xpm_file_to_image(mlx, "image/collec1.xpm", &width, &height);
+                img = mlx_xpm_file_to_image(mlx, "image/col.xpm", &width, &height);
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
             }
@@ -255,7 +255,7 @@ void init_points(t_map *map)
     int j;
     
     i = 0; // fila
-    j = 0; //coumnas
+    j = 0; //columnas
     while (i < map->y) 
     {
         j = 0;

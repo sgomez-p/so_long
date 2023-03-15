@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/15 17:51:18 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:00:18 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void is_valid_ext(char *map)
     int len = ft_strlen(map);
 
     if(map[len - 4] != '.' && map[len - 4] != 'b' && map[len - 4] != 'e' && map[len - 4] != 'r')  
-        error(9);
+       print_error(9);
 }
 
 void all_clean(t_map *map)
