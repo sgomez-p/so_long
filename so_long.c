@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/16 13:36:23 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/16 19:03:10 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include <fcntl.h>
 
 
-
 void end_game(void)
 {
-    ft_printf("\033[0mFINISHED\n\033[0m");
+    printf("\033[32m%s\033[0m", "You win!\n");
     exit(1);
 }
+
 
 char **read_map(char *fmap)
 {
@@ -47,31 +47,28 @@ char **read_map(char *fmap)
 }
 
 
-
-void	where_is_pe(t_map *map)
-{
-	int	j;
-	int	i;
-
-	i = -1;
-	while (map->y > ++i)
-	{
-		j = -1;
-		while (map->map[i][++j])
-		{
-			if (map->map[i][j] == 'P')
-			{
-				map->col_actual = j;
-				map->fil_actual = i;
-			}
-			else if (map->map[i][j] == 'E')
-			{
-				map->col_end = j;
-				map->fil_end = i;
-			}
-		}
-	}
+void where_is_pe(t_map *map) {
+    int i = 0;
+    int j = 0;
+    
+    while (i < map->y) {
+        j = 0;
+        while (map->map[i][j] != '\0') {
+            if (map->map[i][j] == 'P') {
+                map->col_actual = j;
+                map->fil_actual = i;
+            }
+            else if (map->map[i][j] == 'E') {
+                map->col_end = j;
+                map->fil_end = i;
+            }
+            j++;
+        }
+        i++;
+    }
 }
+
+
 
 int map_height(char **map)
 {
@@ -88,143 +85,12 @@ void init_vars(t_map *map)
     map->y = map_height(map->map);
     map->x = ft_strlen(map->map[0]);
 	map->total_points = 0;
-	map->collected_points = 0;
-	map->my_exit = 0;
+	map->points_recollected = 0;
+	map->exit_place = 0;
 	map->move_cont = 0;
+    map->pos = 0;
 
 }
-void print_obstacles_on_map(void *mlx, void *win, t_map *map)
-{
-    void *img;
-    int width;
-    int height;
-    int i = 0;
-    int j;
-
-    while (i < map->y) 
-    {
-        j = 0;
-        while (j < map->x) 
-        {
-            if (map->map[i][j] == '1') 
-            {
-                img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
-                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                mlx_destroy_image(mlx, img);
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-void print_floor_on_map(void *mlx, void *win, t_map *map)
-{
-    void *img;
-    int width;
-    int height;
-    int i = 0;
-    int j;
-
-    while (i < map->y) 
-    {
-        j = 0;
-        while (j < map->x) 
-        {
-            if (map->map[i][j] == '0') 
-            {
-                img = mlx_xpm_file_to_image(mlx, "image/floor.xpm", &width, &height);
-                
-                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                mlx_destroy_image(mlx, img);
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-void print_collectables_on_map(void *mlx, void *win, t_map *map)
-{
-    void *img;
-    int width;
-    int height;
-    int i = 0;
-    int j;
-
-    while (i < map->y) 
-    {
-        j = 0;
-        while (j < map->x) 
-        {
-            if (map->map[i][j] == 'C') 
-            {
-                img = mlx_xpm_file_to_image(mlx, "image/col.xpm", &width, &height);
-                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                mlx_destroy_image(mlx, img);
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-void print_player_on_map(void *mlx, void *win, t_map *map)
-{
-    void *img;
-    int width;
-    int height;
-    int i = 0;
-    int j;
-
-    while (i < map->y) 
-    {
-        j = 0;
-        while (j < map->x) 
-        {
-            if (map->map[i][j] == 'P') 
-            {
-                img = mlx_xpm_file_to_image(mlx, "image/player.xpm", &width, &height);
-                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                mlx_destroy_image(mlx, img);
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-void print_exit_on_map(void *mlx, void *win, t_map *map)
-{
-    void *img;
-    int width;
-    int height;
-    int i;
-    int j;
-    
-    i = 0;
-    j = 0;
-    while (i < map->y) 
-    {
-        j = 0;
-        while (j < map->x) 
-        {
-           
-            if (map->map[i][j] == 'E') 
-            {
-               
-                img = mlx_xpm_file_to_image(mlx, "image/exit.xpm", &width, &height);
-                
-                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-               
-                mlx_destroy_image(mlx, img);
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
 
 int is_valid_move(int fil, int col, t_map *map)
 {
@@ -232,7 +98,7 @@ int is_valid_move(int fil, int col, t_map *map)
         return 0;
     if (map->map[fil][col] == '1')
         return 0;
-    if(map->my_exit != 1 && map->map[fil][col] == 'E')
+    if(map->exit_place != 1 && map->map[fil][col] == 'E')
         return 0;
     return 1;
 }
@@ -259,110 +125,21 @@ void init_points(t_map *map)
     }
 }
 
-void add_points(int fil, int col, t_map *map)
+void pointer_counter(int fil, int col, t_map *map)
 {
     if (map->map[fil][col] == 'C')
     {
-        map->collected_points = map->collected_points + 1;
+        map->points_recollected = map->points_recollected + 1;
     }
-    if(map->collected_points == map->total_points)
+    if(map->points_recollected == map->total_points)
     {
-        map->my_exit = 1;
+        map->exit_place = 1;
     }
-    if (map->map[fil][col] == 'E' && (map->collected_points == map->total_points))
+    if (map->map[fil][col] == 'E' && (map->points_recollected == map->total_points))
     {
         printf("\n");
-        printf("ERES UN MAKINA");
         end_game();
     }
-}
-
-void print_move_cont(t_map *map)
-{
-    char move_cont_str[32];
-    sprintf(move_cont_str, "Movements: %d", map->move_cont);
-    mlx_string_put(map->mlx, map->win, 10, 10, 0xFFFFFF, move_cont_str);
-}
-
-void render_all(t_map *map)
-{
-    print_floor_on_map(map->mlx, map->win, map);
-    print_obstacles_on_map(map->mlx, map->win, map);
-    print_player_on_map(map->mlx, map->win, map);
-    print_exit_on_map(map->mlx, map->win, map);
-}
-
-static void move_left(t_map *map)
-{
-    if(is_valid_move(map->fil_actual, map->col_actual - 1, map))
-    {
-        add_points(map->fil_actual, map->col_actual - 1, map);
-        map->map[map->fil_actual][map->col_actual] = '0';
-        map->col_actual--;
-        map->map[map->fil_actual][map->col_actual] = 'P';
-        map->move_cont = map->move_cont + 1;
-    }
-}
-
-static void move_up(t_map *map)
-{
-    if(is_valid_move(map->fil_actual - 1, map->col_actual, map))
-    {
-        add_points(map->fil_actual - 1, map->col_actual, map);
-        map->map[map->fil_actual][map->col_actual] = '0';
-        map->fil_actual--;
-        map->map[map->fil_actual][map->col_actual] = 'P';
-        map->move_cont = map->move_cont + 1;
-    }
-}
-
-static void move_right(t_map *map)
-{
-    if(is_valid_move(map->fil_actual, map->col_actual + 1, map))
-    {
-        add_points(map->fil_actual, map->col_actual + 1, map);
-        map->map[map->fil_actual][map->col_actual] = '0';
-        map->col_actual++;
-        map->map[map->fil_actual][map->col_actual] = 'P';
-        map->move_cont = map->move_cont + 1;
-    }
-}
-
-static void move_down(t_map *map)
-{
-    if(is_valid_move(map->fil_actual + 1, map->col_actual, map))
-    {
-        add_points(map->fil_actual + 1, map->col_actual, map);
-        map->map[map->fil_actual][map->col_actual] = '0';
-        map->fil_actual++;
-        map->map[map->fil_actual][map->col_actual] = 'P';
-        map->move_cont = map->move_cont + 1;
-    }
-}
-
-int move_the_player(int keycode, t_map *map)
-{
-    
-    if (keycode == 65361)
-    {
-        move_left(map);
-    }
-    if (keycode == 65362)
-    {
-        move_up(map);
-    }
-    if (keycode == 65363)
-    {
-        move_right(map);
-    }
-    if (keycode == 65364)
-    {
-        move_down(map);
-    }
-
-    render_all(map);
-    print_move_cont(map);
-    return (0);
 }
 
 void init_window(t_map *map)
@@ -390,16 +167,10 @@ void init_window(t_map *map)
         }
         j = j + 64;
     }
-    
     print_obstacles_on_map(map->mlx, map->win, map);
-  
     print_player_on_map(map->mlx, map->win, map);
-    
     print_collectables_on_map(map->mlx, map->win, map);
-   
     print_exit_on_map(map->mlx, map->win, map);
-   
-
     mlx_key_hook(map->win, move_the_player, map);
 
     mlx_loop(map->mlx);

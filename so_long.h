@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/16 11:56:25 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:58:43 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,34 @@ typedef struct	t_map
     int col_end;
     int fil_end;
     int total_points;
-    int collected_points;
+    int points_recollected;
     int move_cont;
-    int my_exit;
+    int exit_place;
     void *win;
     void *mlx;
 	int *img;
 	int player_y;
 	int player_x;
+    int pos;
 } 				t_map;
 
 
 void all_clean(t_map *map);
 void print_error_2(int n);
 void print_error(int n);
+void render_all(t_map *map);
+void print_obstacles_on_map(void *mlx, void *win, t_map *map);
+void print_floor_on_map(void *mlx, void *win, t_map *map);
+void print_collectables_on_map(void *mlx, void *win, t_map *map);
+void print_player_on_map(void *mlx, void *win, t_map *map);
+void print_move_cont(t_map *map);
+void print_exit_on_map(void *mlx, void *win, t_map *map);
+int move_the_player(int keycode, t_map *map);
+void move_down(t_map *map);
+void move_right(t_map *map);
+void move_left(t_map *map);
+void move_up(t_map *map);
+int is_valid_move(int fil, int col, t_map *map);
+void pointer_counter(int fil, int col, t_map *map);
 
 #endif

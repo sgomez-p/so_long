@@ -6,13 +6,13 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/14 13:39:35 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/16 18:33:05 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	so_long
 CC			=	gcc
-SRCS		=	so_long.c parse_map.c
+SRCS		=	so_long.c parse_map.c print.c moves.c
 
 LIBFT		=	libft/libft.a
 CFLAGS		=	-Wall -Wextra -Werror
