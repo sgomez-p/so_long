@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/15 19:00:18 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:22:06 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,48 @@
 #include <unistd.h>
 #include "libft/libft.h"
 
-void	fl(char *line)
+void fl(char *line)
 {
-	int	i;
-
-	i = -1;
-    while (line[++i] != '\0' && line[i] != '\r' && line[i] != '\n')
+    int i = 0;
+    
+    if (!line || *line == '\0')
+    {
+        ft_putstr_fd("La primera linea esta vacia\n", 1);
+        exit(1);
+    }
+    
+    while (line[i] != '\0' && line[i] != '\r' && line[i] != '\n')
     {
         if (line[i] != '1')
-            {
-                ft_putstr_fd("ERROR\n", 1);
-                exit(1);
-            }
+        {
+            ft_putstr_fd("No estan bien los bordes\n", 1);
+            exit(1);
+        }
+        i++;
     }
 }
+
 
 void is_valid_rect(t_map **map)
 {
-    int aux = 1, idx = 1, len = 1;
+    int i = 0, aux = (*map)->y - 1;
 
-    if((*map)->y >= (*map)->x)
-        ft_putstr_fd("El mapa no es rectangular\n", 1);
-    while(aux++ < (*map)->y && len < (*map)->y)
+    while (i < aux)
     {
-        idx = ft_strlen((*map)->map[len]);
-        if(len == (*map)->y - 1)
-            (void)idx;
-        len++;
+        if (ft_strlen((*map)->map[i]) != ft_strlen((*map)->map[i + 1]))
+        {
+            ft_putstr_fd("No es rectangular\n", 1);
+            exit(1);
+        }
+        i++;
     }
+
 }
+
 
 void is_valid_walls(t_map **map)
 {
-    int i = 1, aux = (*map)->y - 1;
+    int i = 0, aux = (*map)->y - 1;
 
     fl((*map)->map[0]);
     while(i < aux)
@@ -74,7 +83,7 @@ void is_valid_chars(t_map **map)
         {
             if ((*map)->map[y][x] != '0' && (*map)->map[y][x] != '1' && (*map)->map[y][x] != 'C' && (*map)->map[y][x] != 'E' && (*map)->map[y][x] != 'P')
             {
-                ft_putstr_fd("ERROR\n", 1);
+                ft_putstr_fd("Hay caracteres no validos\n", 1);
                 exit(1);
             }
             x++;
@@ -108,7 +117,7 @@ void is_valid_pec(t_map **map)
     }
     if (let[0] != 1 || let[1] != 1 || let[2] != 1)
     {
-        ft_putstr_fd("ERROR\n", 1);
+        ft_putstr_fd("Falta personaje, salida o colectable\n", 1);
         exit(1);
     }
 }

@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/15 20:45:34 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:36:23 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void end_game(void)
 {
-    ft_printf("\033[0;FINISHED\n\033[0m");
+    ft_printf("\033[0mFINISHED\n\033[0m");
     exit(1);
 }
 
@@ -25,27 +25,28 @@ char **read_map(char *fmap)
 {
     int		fd;
     char	*line;
-	char	*joined_lines;
+    char	*joined_lines;
 
-	line = "";
-	joined_lines = ft_calloc(1, sizeof(char));
-	fd = open(fmap, O_RDONLY);
-	if (fd < 0)
-		print_error(3);
-	while (line)
-	{
-		line = get_next_line(fd);
-		if (line == NULL || line[0] == '\n')
-			break ;
-		joined_lines = ft_strjoin(joined_lines, line);
-		free(line);
-	}
-	free(line);
-	close(fd);
-	if (joined_lines[0] == '\0')
-		print_error(3);
-	return (ft_split(joined_lines, '\n'));
+    line = NULL;
+    joined_lines = NULL;
+    fd = open(fmap, O_RDONLY);
+    if (fd < 0)
+        print_error(3);
+   while ((line = get_next_line(fd)))
+    {
+    if (line[0] == '\n')
+        break ;
+    joined_lines = ft_strjoin(joined_lines, line);
+    free(line);
+    }
+    free(line);
+    close(fd);
+    if (!joined_lines || joined_lines[0] == '\0')
+        print_error(3);
+    return (ft_split(joined_lines, '\n'));
 }
+
+
 
 void	where_is_pe(t_map *map)
 {
@@ -92,17 +93,14 @@ void init_vars(t_map *map)
 	map->move_cont = 0;
 
 }
-
 void print_obstacles_on_map(void *mlx, void *win, t_map *map)
 {
     void *img;
     int width;
     int height;
-    int i;
+    int i = 0;
     int j;
-    
-    i = 0;
-    j = 0;
+
     while (i < map->y) 
     {
         j = 0;
@@ -110,18 +108,9 @@ void print_obstacles_on_map(void *mlx, void *win, t_map *map)
         {
             if (map->map[i][j] == '1') 
             {
-                if((i + j) % 2 == 0)
-                {
-                    img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
-                    mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                    mlx_destroy_image(mlx, img);
-                }
-                if((i + j) % 2 == 1)
-                {
-                    img = mlx_xpm_file_to_image(mlx, "image/playerup.xpm", &width, &height);
-                    mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
-                    mlx_destroy_image(mlx, img);
-                }
+                img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
+                mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
+                mlx_destroy_image(mlx, img);
             }
             j++;
         }
@@ -134,11 +123,9 @@ void print_floor_on_map(void *mlx, void *win, t_map *map)
     void *img;
     int width;
     int height;
-    int i;
+    int i = 0;
     int j;
-    
-    i = 0;
-    j = 0;
+
     while (i < map->y) 
     {
         j = 0;
@@ -147,6 +134,7 @@ void print_floor_on_map(void *mlx, void *win, t_map *map)
             if (map->map[i][j] == '0') 
             {
                 img = mlx_xpm_file_to_image(mlx, "image/floor.xpm", &width, &height);
+                
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
             }
@@ -161,11 +149,9 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map)
     void *img;
     int width;
     int height;
-    int i;
+    int i = 0;
     int j;
-    
-    i = 0;
-    j = 0;
+
     while (i < map->y) 
     {
         j = 0;
@@ -188,11 +174,9 @@ void print_player_on_map(void *mlx, void *win, t_map *map)
     void *img;
     int width;
     int height;
-    int i;
+    int i = 0;
     int j;
-    
-    i = 0;
-    j = 0;
+
     while (i < map->y) 
     {
         j = 0;
@@ -225,10 +209,14 @@ void print_exit_on_map(void *mlx, void *win, t_map *map)
         j = 0;
         while (j < map->x) 
         {
+           
             if (map->map[i][j] == 'E') 
             {
+               
                 img = mlx_xpm_file_to_image(mlx, "image/exit.xpm", &width, &height);
+                
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
+               
                 mlx_destroy_image(mlx, img);
             }
             j++;
@@ -236,6 +224,7 @@ void print_exit_on_map(void *mlx, void *win, t_map *map)
         i++;
     }
 }
+
 
 int is_valid_move(int fil, int col, t_map *map)
 {
@@ -353,29 +342,28 @@ static void move_down(t_map *map)
 
 int move_the_player(int keycode, t_map *map)
 {
-    if (keycode == 0 || keycode == 123)
+    
+    if (keycode == 65361)
     {
         move_left(map);
     }
-    else if (keycode == 13 || keycode == 126)
+    if (keycode == 65362)
     {
         move_up(map);
     }
-    else if (keycode == 2 || keycode == 124)
+    if (keycode == 65363)
     {
         move_right(map);
     }
-    else if (keycode == 1 || keycode == 125)
+    if (keycode == 65364)
     {
         move_down(map);
     }
-    else if (keycode == 53)
-        end_game();
+
     render_all(map);
     print_move_cont(map);
     return (0);
 }
-
 
 void init_window(t_map *map)
 {
@@ -386,7 +374,6 @@ void init_window(t_map *map)
     int j;
 
     map->mlx = mlx_init();
-
     map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 64 + 2), "juego");
 
     i = 0;
@@ -403,12 +390,18 @@ void init_window(t_map *map)
         }
         j = j + 64;
     }
+    
     print_obstacles_on_map(map->mlx, map->win, map);
+  
     print_player_on_map(map->mlx, map->win, map);
+    
     print_collectables_on_map(map->mlx, map->win, map);
+   
     print_exit_on_map(map->mlx, map->win, map);
+   
 
     mlx_key_hook(map->win, move_the_player, map);
+
     mlx_loop(map->mlx);
 }
 
@@ -426,4 +419,5 @@ int main(int argc, char **argv)
     all_clean(&map);
     init_points(&map);
     init_window(&map);
+    
 }
