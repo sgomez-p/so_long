@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/16 18:58:43 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 09:34:30 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "libft/libft.h"
 # include <fcntl.h>
 #include <mlx.h>
-#include "minilibx-linux/mlx.h"
+//#include "minilibx-linux/mlx.h"
 
 #define TILE_SIZE 64
 
@@ -66,6 +66,8 @@ void move_right(t_map *map);
 void move_left(t_map *map);
 void move_up(t_map *map);
 int is_valid_move(int fil, int col, t_map *map);
-void pointer_counter(int fil, int col, t_map *map);
+void point_count(int fil, int col, t_map *map);
+void end_game(void);
+void esc_game(void);
 
 #endif

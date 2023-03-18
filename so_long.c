@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/16 19:03:10 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 09:34:59 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,23 @@ void end_game(void)
     printf("\033[32m%s\033[0m", "You win!\n");
     exit(1);
 }
+
+void esc_game(void)
+{
+printf("\033[48;2;255;255;0m\033[38;2;0;0;0m"); // Establecer el color de fondo a amarillo y el color del texto a negro
+printf("\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
+printf("┃        Exit from Hyrule         ┃\n");
+printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
+printf("\033[0m"); // Restablecer los colores a los valores predeterminados
+exit(1);
+}
+
+// void esc_game(void)
+// {
+//     printf("\033[43m\033[30m%s\033[0m\n", "Exit from Hyrule");
+//     exit(1);
+// }
+
 
 
 char **read_map(char *fmap)
@@ -67,8 +84,6 @@ void where_is_pe(t_map *map) {
         i++;
     }
 }
-
-
 
 int map_height(char **map)
 {
@@ -125,7 +140,7 @@ void init_points(t_map *map)
     }
 }
 
-void pointer_counter(int fil, int col, t_map *map)
+void point_count(int fil, int col, t_map *map)
 {
     if (map->map[fil][col] == 'C')
     {
@@ -190,5 +205,4 @@ int main(int argc, char **argv)
     all_clean(&map);
     init_points(&map);
     init_window(&map);
-    
 }
