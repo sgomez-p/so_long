@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:31:33 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 09:39:35 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 10:06:14 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,52 +65,52 @@ void move_down(t_map *map)
     }
 }
 
-int move_the_player(int keycode, t_map *map) // linux boy
-{
-    
-    if (keycode == 65361)
-    {
-        move_left(map);
-    }
-    if (keycode == 65362)
-    {
-        move_up(map);
-    }
-    if (keycode == 65363)
-    {
-        move_right(map);
-    }
-    if (keycode == 65364)
-    {
-        move_down(map);
-    }
-
-    render_all(map);
-    print_move_cont(map);
-    return (0);
-}
-
-// int move_the_player(int keycode, t_map *map)  // maker
+// int move_the_player(int keycode, t_map *map) // linux boy
 // {
-//     if (keycode == 0 || keycode == 123)
+    
+//     if (keycode == 65361)
 //     {
 //         move_left(map);
 //     }
-//     else if (keycode == 13 || keycode == 126)
+//     if (keycode == 65362)
 //     {
 //         move_up(map);
 //     }
-//     else if (keycode == 2 || keycode == 124)
+//     if (keycode == 65363)
 //     {
 //         move_right(map);
 //     }
-//     else if (keycode == 1 || keycode == 125)
+//     if (keycode == 65364)
 //     {
 //         move_down(map);
 //     }
-//     else if (keycode == 53)
-//         esc_game();
+
 //     render_all(map);
 //     print_move_cont(map);
 //     return (0);
 // }
+
+int move_the_player(int keycode, t_map *map)  // maker
+{
+    if (keycode == 0 || keycode == 123)
+    {
+        move_left(map);
+    }
+    else if (keycode == 13 || keycode == 126)
+    {
+        move_up(map);
+    }
+    else if (keycode == 2 || keycode == 124)
+    {
+        move_right(map);
+    }
+    else if (keycode == 1 || keycode == 125)
+    {
+        move_down(map);
+    }
+    else if (keycode == 53)
+        esc_game();
+    render_all(map);
+    print_move_cont(map);
+    return (0);
+}

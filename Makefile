@@ -6,9 +6,10 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/16 18:33:05 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/18 11:13:34 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME		=	so_long
 CC			=	gcc
@@ -28,28 +29,28 @@ endif
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
-			make -C libft
-			make clean -C libft
-			$(CC) $(SRCS) $(LIBFT) $(MLXFLAGS) $(CFLAGS) -o $(NAME)
+			@make -C libft >/dev/null 2>&1
+			@make clean -C libft >/dev/null 2>&1
+			@$(CC) $(SRCS) $(LIBFT) $(MLXFLAGS) $(CFLAGS) -o $(NAME) >/dev/null 2>&1
 
 %o:			%.c
-			$(CC) $(CFLAGS) -Imlx -c $< -o $@
+			@$(CC) $(CFLAGS) -Imlx -c $< -o $@ >/dev/null 2>&1
 
 clean:
-			$(RM) $(OBJS)
+			@$(RM) $(OBJS) >/dev/null 2>&1
 
 fclean:		clean
-			$(RM) $(NAME)
-			$(RM) *.out
-			make fclean -C libft/
+			@$(RM) $(NAME) >/dev/null 2>&1
+			@$(RM) *.out >/dev/null 2>&1
+			@make fclean -C libft/ >/dev/null 2>&1
 
 re:			fclean all
 
-git:
-	@git add .
-	@git commit -m "$m"
-	@git push
-	@echo "Commit sent to github"
-# To call: make git m="my commit"
+git: fclean
+			@echo "\t${BIPurple}>>Push To Git<<${NoColor}"
+			@git add . ;
+			@read -p "Name the commit: " commit ;\
+			git commit -m "$$commit" ;\
+			git push;
 
 .PHONY:		all clean fclean re

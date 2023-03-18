@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 09:34:30 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 10:18:17 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 # include <fcntl.h>
 #include <mlx.h>
 //#include "minilibx-linux/mlx.h"
-
-#define TILE_SIZE 64
 
 
 typedef struct	t_map
@@ -67,7 +65,7 @@ void move_left(t_map *map);
 void move_up(t_map *map);
 int is_valid_move(int fil, int col, t_map *map);
 void point_count(int fil, int col, t_map *map);
-void end_game(void);
+void end_game(t_map *map);
 void esc_game(void);
 
 #endif

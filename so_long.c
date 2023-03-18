@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 09:34:59 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 12:54:15 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,30 @@
 #include <fcntl.h>
 
 
-void end_game(void)
+void print_you_win(t_map *map)
 {
-    printf("\033[32m%s\033[0m", "You win!\n");
+    int i = 0;
+    char win_str[] = "You win!";
+    int x_pos = (map->x * 64) / 2 - 50;
+    int y_pos = (map->y * 64) / 2 - 20;
+    int color1 = 0x00FF00; // verde claro
+    int color2 = 0x008000; // verde oscuro
+
+    while (i < 5) {
+        mlx_string_put(map->mlx, map->win, x_pos, y_pos, (i % 2 == 0) ? color1 : color2, win_str);
+        mlx_do_sync(map->mlx);
+        usleep(200000);
+        i++;
+    }
+}
+
+
+void end_game(t_map *map)
+{
+    print_you_win(map);
     exit(1);
 }
+
 
 void esc_game(void)
 {
@@ -35,8 +54,6 @@ exit(1);
 //     printf("\033[43m\033[30m%s\033[0m\n", "Exit from Hyrule");
 //     exit(1);
 // }
-
-
 
 char **read_map(char *fmap)
 {
@@ -62,7 +79,6 @@ char **read_map(char *fmap)
         print_error(3);
     return (ft_split(joined_lines, '\n'));
 }
-
 
 void where_is_pe(t_map *map) {
     int i = 0;
@@ -153,7 +169,7 @@ void point_count(int fil, int col, t_map *map)
     if (map->map[fil][col] == 'E' && (map->points_recollected == map->total_points))
     {
         printf("\n");
-        end_game();
+        end_game(map);
     }
 }
 
@@ -166,10 +182,10 @@ void init_window(t_map *map)
     int j;
 
     map->mlx = mlx_init();
-    map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 64 + 2), "juego");
+    map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 74 + 2), "juego");
 
     i = 0;
-    j = 0;
+    j = 64;
     while(j < (map->y * 64 + 2))
     {
         i = 0;
@@ -186,6 +202,7 @@ void init_window(t_map *map)
     print_player_on_map(map->mlx, map->win, map);
     print_collectables_on_map(map->mlx, map->win, map);
     print_exit_on_map(map->mlx, map->win, map);
+    print_move_cont(map);
     mlx_key_hook(map->win, move_the_player, map);
 
     mlx_loop(map->mlx);
