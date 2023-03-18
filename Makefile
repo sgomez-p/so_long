@@ -6,14 +6,14 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/18 11:13:34 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/18 13:14:48 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME		=	so_long
 CC			=	gcc
-SRCS		=	so_long.c parse_map.c print.c moves.c
+SRCS		=	so_long.c parse_map.c print.c moves.c end_game.c
 
 LIBFT		=	libft/libft.a
 CFLAGS		=	-Wall -Wextra -Werror

@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 10:18:17 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 13:15:03 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ void move_left(t_map *map);
 void move_up(t_map *map);
 int is_valid_move(int fil, int col, t_map *map);
 void point_count(int fil, int col, t_map *map);
+
+//--------------- end_game ----------------
+void win_game(void);
+void print_you_win(t_map *map);
 void end_game(t_map *map);
 void esc_game(void);
+
 
 #endif

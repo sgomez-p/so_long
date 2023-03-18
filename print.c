@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:16:06 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:04:00 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 13:06:13 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,10 @@ void print_player_on_map(void *mlx, void *win, t_map *map)
     int i = 0;
     int j;
 
-    while (i < map->y) 
+    while (++i < map->y) 
     {
         j = 0;
-        while (j < map->x) 
+        while (++j < map->x) 
         {
             if (map->map[i][j] == 'P') 
             {
@@ -140,13 +140,10 @@ void print_player_on_map(void *mlx, void *win, t_map *map)
 					img = mlx_xpm_file_to_image(mlx, "image/playerleft.xpm", &width, &height);
 				else if (map->pos == 4)
 					img = mlx_xpm_file_to_image(mlx, "image/playerright.xpm", &width, &height);
-
 				mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
             }
-            j++;
         }
-        i++;
     }
 }
 
