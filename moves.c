@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:31:33 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 10:06:14 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:27:48 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int move_the_player(int keycode, t_map *map)  // maker
     {
         move_down(map);
     }
-    else if (keycode == 53)
-        esc_game();
+    else if (keycode == 53) // hay que hacerlo con la cruz de la ventana pero nadie lo hace y no se como hacerlo
+        esc_game(map);
     render_all(map);
     print_move_cont(map);
     return (0);

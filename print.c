@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:16:06 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:06:13 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:02:50 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void print_obstacles_on_map(void *mlx, void *win, t_map *map)
         {
             if (map->map[i][j] == '1') 
             {
-                img = mlx_xpm_file_to_image(mlx, "image/wall.xpm", &width, &height);
+                img = mlx_xpm_file_to_image(mlx, "textures/wall.xpm", &width, &height);
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
             }
@@ -53,7 +53,7 @@ void print_floor_on_map(void *mlx, void *win, t_map *map)
         {
             if (map->map[i][j] == '0') 
             {
-                img = mlx_xpm_file_to_image(mlx, "image/floor.xpm", &width, &height);
+                img = mlx_xpm_file_to_image(mlx, "textures/floor.xpm", &width, &height);
                 
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
@@ -80,9 +80,9 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map)
             if (map->map[i][j] == 'C') 
             {   
 				if((i + j) % 2 == 0)
-					img = mlx_xpm_file_to_image(mlx, "image/redrupee.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/redrupee.xpm", &width, &height);
 				else
-					img = mlx_xpm_file_to_image(mlx, "image/bluerupee.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/bluerupee.xpm", &width, &height);
 				mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
 				mlx_destroy_image(mlx, img);
 			}
@@ -107,7 +107,7 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map)
 //         {
 //             if (map->map[i][j] == 'P') 
 //             {
-//                 img = mlx_xpm_file_to_image(mlx, "image/player.xpm", &width, &height);
+//                 img = mlx_xpm_file_to_image(mlx, "textures/player.xpm", &width, &height);
 //                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
 //                 mlx_destroy_image(mlx, img);
 //             }
@@ -133,13 +133,13 @@ void print_player_on_map(void *mlx, void *win, t_map *map)
             if (map->map[i][j] == 'P') 
             {
                 if(map->pos == 0 || map->pos == 2)
-					img = mlx_xpm_file_to_image(mlx, "image/player.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/player.xpm", &width, &height);
                 else if (map->pos == 1)
-					img = mlx_xpm_file_to_image(mlx, "image/playerup.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/playerup.xpm", &width, &height);
 				else if (map->pos == 3)
-					img = mlx_xpm_file_to_image(mlx, "image/playerleft.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/playerleft.xpm", &width, &height);
 				else if (map->pos == 4)
-					img = mlx_xpm_file_to_image(mlx, "image/playerright.xpm", &width, &height);
+					img = mlx_xpm_file_to_image(mlx, "textures/playerright.xpm", &width, &height);
 				mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                 mlx_destroy_image(mlx, img);
             }
@@ -166,7 +166,7 @@ void print_exit_on_map(void *mlx, void *win, t_map *map)
             if (map->map[i][j] == 'E') 
             {
                
-                img = mlx_xpm_file_to_image(mlx, "image/exit.xpm", &width, &height);
+                img = mlx_xpm_file_to_image(mlx, "textures/exit.xpm", &width, &height);
                 
                 mlx_put_image_to_window(mlx, win, img, j * 64, i * 64);
                
@@ -191,9 +191,10 @@ void print_move_cont(t_map *map)
     int width;
     int height;
     char move_cont_str[32];
+    char collect_cont_str[32];
     int i = 0;
 
-    img = mlx_xpm_file_to_image(map->mlx, "image/black.xpm", &width, &height);
+    img = mlx_xpm_file_to_image(map->mlx, "textures/black.xpm", &width, &height);
     while (i < (64 * map->x))
     {
         mlx_put_image_to_window(map->mlx, map->win, img, i, 64 * (map->y));
@@ -202,6 +203,8 @@ void print_move_cont(t_map *map)
     }
     sprintf(move_cont_str, "Moves: %d", map->move_cont);
     mlx_string_put(map->mlx, map->win, 20, 64 * (map->y) , 0xFFFFFF, move_cont_str);
+    sprintf(collect_cont_str, "Collectables: %d", map->points_recollected);
+    mlx_string_put(map->mlx, map->win, 20, 64 * (map->y) + 30, 0xFF0000, collect_cont_str);
 }
 
 void render_all(t_map *map)

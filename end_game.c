@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 13:13:27 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:13:36 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 15:29:41 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void print_you_win(t_map *map)
     int i = 0;
     char win_str[] = "You win!";
     int x_pos = (map->x * 64) / 2 - 50;
-    int y_pos = (map->y * 64);
+    int y_pos = (map->y * 64 + 10);
     int color1 = 0x00FF00; // verde claro
     int color2 = 0x008000; // verde oscuro
 
@@ -50,14 +50,16 @@ void end_game(t_map *map)
 }
 
 
-void esc_game(void)
+int esc_game(t_map *map)
 {
-printf("\033[48;2;255;255;0m\033[38;2;0;0;0m"); // Establecer el color de fondo a amarillo y el color del texto a negro
-printf("\n    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
-printf("    ┃          Exit from Hyrule       ┃\n");
-printf("    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
-printf("\033[0m"); // Restablecer los colores a los valores predeterminados
-exit(1);
+	printf("\033[48;2;255;255;0m\033[38;2;0;0;0m"); // Establecer el color de fondo a amarillo y el color del texto a negro
+	printf("\n    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n");
+	printf("    ┃          Exit  Hyrule           ┃\n");
+	printf("    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
+	printf("\033[0m"); // Restablecer los colores a los valores predeterminados
+	mlx_destroy_window(map->mlx, map->win);
+    exit(0);
+    return (0);
 }
 
 // void esc_game(void)

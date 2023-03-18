@@ -6,14 +6,12 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:13:20 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:26:33 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include <fcntl.h>
-
-
 
 
 char **read_map(char *fmap)
@@ -41,47 +39,15 @@ char **read_map(char *fmap)
     return (ft_split(joined_lines, '\n'));
 }
 
-void where_is_pe(t_map *map) {
-    int i = 0;
-    int j = 0;
-    
-    while (i < map->y) {
-        j = 0;
-        while (map->map[i][j] != '\0') {
-            if (map->map[i][j] == 'P') {
-                map->col_actual = j;
-                map->fil_actual = i;
-            }
-            else if (map->map[i][j] == 'E') {
-                map->col_end = j;
-                map->fil_end = i;
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
-int map_height(char **map)
-{
-    int i;
-    
-    i = 0;
-    while(map[i] != NULL)
-        i++;
-    return(i);
-}
-
 void init_vars(t_map *map)
 {
     map->y = map_height(map->map);
     map->x = ft_strlen(map->map[0]);
 	map->total_points = 0;
 	map->points_recollected = 0;
-	map->exit_place = 0;
+	map->exit = 0;
 	map->move_cont = 0;
     map->pos = 0;
-
 }
 
 int is_valid_move(int fil, int col, t_map *map)
@@ -90,7 +56,7 @@ int is_valid_move(int fil, int col, t_map *map)
         return 0;
     if (map->map[fil][col] == '1')
         return 0;
-    if(map->exit_place != 1 && map->map[fil][col] == 'E')
+    if(map->exit != 1 && map->map[fil][col] == 'E')
         return 0;
     return 1;
 }
@@ -125,7 +91,7 @@ void point_count(int fil, int col, t_map *map)
     }
     if(map->points_recollected == map->total_points)
     {
-        map->exit_place = 1;
+        map->exit = 1;
     }
     if (map->map[fil][col] == 'E' && (map->points_recollected == map->total_points))
     {
@@ -152,7 +118,7 @@ void init_window(t_map *map)
         i = 0;
         while(i < (map->x * 64))
         {
-            img = mlx_xpm_file_to_image(map->mlx, "image/floor.xpm", &width, &height);
+            img = mlx_xpm_file_to_image(map->mlx, "textures/floor.xpm", &width, &height);
             mlx_put_image_to_window(map->mlx, map->win, img, i, j);
             mlx_destroy_image(map->mlx, img);
             i = i + 64;
@@ -165,10 +131,9 @@ void init_window(t_map *map)
     print_exit_on_map(map->mlx, map->win, map);
     print_move_cont(map);
     mlx_key_hook(map->win, move_the_player, map);
-
+    mlx_hook(map->win, 17, 1L<<0, esc_game, map);
     mlx_loop(map->mlx);
 }
-
 
 int main(int argc, char **argv)
 {

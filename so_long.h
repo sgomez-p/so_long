@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:15:03 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/03/18 14:52:20 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct	t_map
     int total_points;
     int points_recollected;
     int move_cont;
-    int exit_place;
+    int exit;
     void *win;
     void *mlx;
 	int *img;
@@ -58,6 +58,8 @@ void print_collectables_on_map(void *mlx, void *win, t_map *map);
 void print_player_on_map(void *mlx, void *win, t_map *map);
 void print_move_cont(t_map *map);
 void print_exit_on_map(void *mlx, void *win, t_map *map);
+
+//--------------- moves ----------------
 int move_the_player(int keycode, t_map *map);
 void move_down(t_map *map);
 void move_right(t_map *map);
@@ -66,11 +68,18 @@ void move_up(t_map *map);
 int is_valid_move(int fil, int col, t_map *map);
 void point_count(int fil, int col, t_map *map);
 
+//--------------- parse_map ----------------
+void where_is_pe(t_map *map);
+int map_height(char **map);
+
 //--------------- end_game ----------------
 void win_game(void);
 void print_you_win(t_map *map);
 void end_game(t_map *map);
-void esc_game(void);
+int esc_game(t_map *map);
 
+//--------------- errors ----------------
+void print_error_2(int n);
+void print_error(int n);
 
 #endif
