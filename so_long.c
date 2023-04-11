@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:56:23 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 16:26:33 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/04/11 13:13:31 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,21 @@ void init_vars(t_map *map)
 	map->total_points = 0;
 	map->points_recollected = 0;
 	map->exit = 0;
+    map->visited = malloc(sizeof(int*) * map->fil_end);
 	map->move_cont = 0;
     map->pos = 0;
 }
 
-int is_valid_move(int fil, int col, t_map *map)
-{
-    if (fil < 0 || fil >= map->y || col < 0 || col >= map->x)
-        return 0;
-    if (map->map[fil][col] == '1')
-        return 0;
-    if(map->exit != 1 && map->map[fil][col] == 'E')
-        return 0;
-    return 1;
-}
+// int is_valid_move(int fil, int col, t_map *map)
+// {
+//     if (fil < 0 || fil >= map->y || col < 0 || col >= map->x)
+//         return 0;
+//     if (map->map[fil][col] == '1')
+//         return 0;
+//     if(map->exit != 1 && map->map[fil][col] == 'E')
+//         return 0;
+//     return 1;
+// }
 
 void init_points(t_map *map)
 {
@@ -109,7 +110,7 @@ void init_window(t_map *map)
     int j;
 
     map->mlx = mlx_init();
-    map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 74 + 2), "juego");
+    map->win = mlx_new_window(map->mlx, (map->x * 64), (map->y * 74 + 2), "The so_long of zelda");
 
     i = 0;
     j = 64;

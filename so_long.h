@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 11:03:14 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 14:52:20 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:18:39 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 # include <stdarg.h>
 # include "libft/libft.h"
 # include <fcntl.h>
-#include <mlx.h>
-//#include "minilibx-linux/mlx.h"
+//#include <mlx.h>
+#include "minilibx-linux/mlx.h"
 
 
 typedef struct	t_map
 {
     char **map;
+    char **data;
     int x;
     int y;
     int col_actual;
@@ -45,6 +46,7 @@ typedef struct	t_map
 	int player_y;
 	int player_x;
     int pos;
+    char **visited;
 } 				t_map;
 
 

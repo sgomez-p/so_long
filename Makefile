@@ -6,7 +6,7 @@
 #    By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/23 10:55:41 by sgomez-p          #+#    #+#              #
-#    Updated: 2023/03/18 13:43:11 by sgomez-p         ###   ########.fr        #
+#    Updated: 2023/03/20 23:52:40 by sgomez-p         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ RM			=	rm -f
 OBJS		=	$(SRCS:%.c=%.o)
 
 ifeq ($(shell uname), Linux)
-MLXFLAGS	=	-L ./mlx_linux/ -lmlx -Ilmlx -lXext -lX11 -lbsd
+MLXFLAGS	=	-L ./minilibx-linux -lmlx -Ilmlx -lXext -lX11
 endif
 
 

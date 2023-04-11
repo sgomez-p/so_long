@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/03/18 13:58:06 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:20:26 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,131 @@ void is_valid_ext(char *map)
        print_error(9);
 }
 
+void check_surrounded_by_walls(t_map *map)
+{
+    // Verificar si el personaje está rodeado de muros
+    if (map->map[map->fil_actual - 1][map->col_actual] == '1' && // arriba
+        map->map[map->fil_actual + 1][map->col_actual] == '1' && // abajo
+        map->map[map->fil_actual][map->col_actual - 1] == '1' && // izquierda
+        map->map[map->fil_actual][map->col_actual + 1] == '1')   // derecha
+    {
+        printf("El personaje está rodeado de muros. Game Over.\n");
+        exit(1);
+    }
+
+    // Verificar si la salida está rodeada de muros
+    if (map->map[map->fil_end - 1][map->col_end] == '1' && // arriba
+        map->map[map->fil_end + 1][map->col_end] == '1' && // abajo
+        map->map[map->fil_end][map->col_end - 1] == '1' && // izquierda
+        map->map[map->fil_end][map->col_end + 1] == '1')   // derecha
+    {
+        printf("La salida está rodeada de muros. Game Over.\n");
+        exit(1);
+    }
+}
+
+int is_valid_move(int fil, int col, t_map *map)
+{
+    if (fil < 0 || fil >= map->y || col < 0 || col >= map->x)
+        return 0;
+    if (map->map[fil][col] == '1')
+        return 0;
+    if(map->exit != 1 && map->map[fil][col] == 'E')
+        return 0;
+    return 1;
+}
+
+int dfs(int x, int y, int max_x, int max_y, char **visited, t_map *map)
+{
+	if (!is_valid_move(x, y, map))
+		return (0);
+	if (x == map->fil_end && y == map->col_end)
+		return (1);
+	visited[y][x] = 1;
+	if (dfs(x + 1, y, max_x, max_y, visited, map))
+		return (1);
+	if (dfs(x - 1, y, max_x, max_y, visited, map))
+		return (1);
+	if (dfs(x, y + 1, max_x, max_y, visited, map))
+		return (1);
+	if (dfs(x, y - 1,max_x, max_y, visited, map))
+        return (1);
+    visited[y][x] = 0;
+    return (0);
+}
+
+int	is_valid_path(t_map *map)
+{
+	char	**visited;
+	int		i;
+
+	visited = ft_calloc(map->y, sizeof(char *));
+	i = 0;
+	while (i < map->y)
+	{
+		visited[i] = ft_calloc(map->x, sizeof(char));
+		i++;
+	}
+
+	if (!dfs(map->fil_actual, map->col_actual, map->x, map->y, visited, map))
+	{
+		// Si no hay camino válido, liberamos la memoria y devolvemos 0
+		i = 0;
+		while (i < map->y)
+		{
+			free(visited[i]);
+			i++;
+		}
+		free(visited);
+		return (0);
+	}
+
+	// Si hay camino válido, liberamos la memoria y devolvemos 1
+	i = 0;
+	while (i < map->y)
+	{
+		free(visited[i]);
+		i++;
+	}
+	free(visited);
+	return (1);
+}
+
+
+int check_path_validity(t_map *map)
+{
+    char **visited;
+    int result;
+    visited = ft_calloc(map->y, sizeof(char *));
+    if (!visited)
+        return (0);
+    int i = 0;
+    while (i < map->y)
+    {
+        visited[i] = ft_calloc(map->x, sizeof(char));
+        if (!visited[i])
+            return (0);
+        i++;
+    }
+    result = dfs(map->fil_actual, map->col_actual, map->x, map->y, visited, map);
+    i = 0;
+    while (i < map->y)
+    {
+        free(visited[i]);
+        i++;
+    }
+    free(visited);
+    return (result);
+}
+
+
 void all_clean(t_map *map)
 {
     is_valid_rect(&map);
     is_valid_walls(&map);
     is_valid_chars(&map);
     is_valid_pec(&map);
+    check_surrounded_by_walls(map);
 }
 
 void where_is_pe(t_map *map) 
