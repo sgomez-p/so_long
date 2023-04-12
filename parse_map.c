@@ -6,7 +6,7 @@
 /*   By: sgomez-p <sgomez-p@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 10:53:48 by sgomez-p          #+#    #+#             */
-/*   Updated: 2023/04/11 14:20:26 by sgomez-p         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:34:24 by sgomez-p         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ void fl(char *line)
 
 void is_valid_rect(t_map **map)
 {
-    int i = 0, aux = (*map)->y - 1;
-
+    int i = 0;
+    int aux;
+    
+    aux = (*map)->y - 1;
     while (i < aux)
     {
         if (ft_strlen((*map)->map[i]) != ft_strlen((*map)->map[i + 1]))
@@ -182,70 +184,89 @@ int dfs(int x, int y, int max_x, int max_y, char **visited, t_map *map)
     return (0);
 }
 
-int	is_valid_path(t_map *map)
+static char	**create_vector(int count, int len, t_map *map)
 {
-	char	**visited;
-	int		i;
+	char	**vector;
+	int		y;
+	int		x;
 
-	visited = ft_calloc(map->y, sizeof(char *));
-	i = 0;
-	while (i < map->y)
+	y = -1;
+	vector = ft_calloc(count + 1, sizeof(vector));
+	while (count > ++y)
 	{
-		visited[i] = ft_calloc(map->x, sizeof(char));
-		i++;
+		x = 0;
+		vector[y] = ft_calloc(len + 1, sizeof(char));
+		while (len > x)
+			vector[y][x++] = '0';
 	}
+	vector[map->player_x][map->player_y] = '1';
+	return (vector);
+}
 
-	if (!dfs(map->fil_actual, map->col_actual, map->x, map->y, visited, map))
+static int	check_if_available(t_map *map, char **vector, int fil, int col)
+{
+	if ((vector[col][fil] != '1')
+		&& (map->map[col][fil] != '1')
+		&& (vector[col + 1][fil] == '1' || vector[col - 1][fil] == '1'
+		|| vector[col][fil + 1] == '1' || vector[col][fil - 1] == '1'))
 	{
-		// Si no hay camino válido, liberamos la memoria y devolvemos 0
-		i = 0;
-		while (i < map->y)
+		if (map->map[col][fil] == 'E')
+			return (1);
+		else
+			return (2);
+	}
+	return (0);
+}
+
+static char	**check_path(t_map *map, int col, int fil, int mod)
+{
+	char	**vector;
+
+	vector = create_vector(map->y, map->x, map);
+	while (mod > 0)
+	{
+		mod = 0;
+		col = 0;
+		while (map->y - 1 > ++col)
 		{
-			free(visited[i]);
-			i++;
+			fil = 0;
+			while (map->x - 1 > ++fil)
+			{
+				if (check_if_available(map, vector, fil, col) == 1)
+						vector[col][fil] = '2';
+				else if (check_if_available(map, vector, fil, col) == 2)
+				{
+					mod++;
+					vector[col][fil] = '1';
+				}
+			}
 		}
-		free(visited);
-		return (0);
 	}
-
-	// Si hay camino válido, liberamos la memoria y devolvemos 1
-	i = 0;
-	while (i < map->y)
-	{
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
-	return (1);
+	return (vector);
 }
 
-
-int check_path_validity(t_map *map)
+void	find_path(t_map *game)
 {
-    char **visited;
-    int result;
-    visited = ft_calloc(map->y, sizeof(char *));
-    if (!visited)
-        return (0);
-    int i = 0;
-    while (i < map->y)
-    {
-        visited[i] = ft_calloc(map->x, sizeof(char));
-        if (!visited[i])
-            return (0);
-        i++;
-    }
-    result = dfs(map->fil_actual, map->col_actual, map->x, map->y, visited, map);
-    i = 0;
-    while (i < map->y)
-    {
-        free(visited[i]);
-        i++;
-    }
-    free(visited);
-    return (result);
-}
+	char	**vector;
+	int		col;
+	int		fil;
 
+
+	col = 0;
+	vector = check_path(game, 0, 0, 1);
+	while (game->y - 1 > ++col)
+	{
+		fil = 0;
+		while (game->x - 1 > ++fil)
+		{
+			if (game->map[col][fil] == 'E' || game->map[col][fil] == 'C')
+			{
+				if (vector[col][fil] == '0')
+					print_error(11);
+			}
+		}
+	}
+}
 
 void all_clean(t_map *map)
 {
@@ -253,8 +274,8 @@ void all_clean(t_map *map)
     is_valid_walls(&map);
     is_valid_chars(&map);
     is_valid_pec(&map);
-    check_surrounded_by_walls(map);
 }
+
 
 void where_is_pe(t_map *map) 
 {
